@@ -1,71 +1,98 @@
 import React from "react";
-import { QRCodeCanvas } from "qrcode.react";
-
-// Example mock tickets data
-const mockTickets = [
-  {
-    id: "tkt_001",
-    event: "Adele - Live in Lagos",
-    date: "2026-03-12T19:00:00.000Z",
-    venue: "Eko Convention Center",
-    seat: "Section A, Row 5, Seat 12",
-    image: "/assets/adele1.jpg",
-    code: "ADELE-LAGOS-001"
-  },
-  {
-    id: "tkt_002",
-    event: "Burna Boy Concert",
-    date: "2026-04-22T20:00:00.000Z",
-    venue: "Accra Arena",
-    seat: "Section B, Row 2, Seat 8",
-    image: "/assets/burna.jpg",
-    code: "BURNABOY-ACC-002"
-  }
-];
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Link,
+  Button,
+  IconButton,
+} from "@mui/material";
+import ArrowBack from "@mui/icons-material/ArrowBackIosNew";
+import { useNavigate } from "react-router-dom";
 
 export default function MyTickets() {
+  const navigate = useNavigate();
+
   return (
-    <div className="p-4 bg-gray-50 min-h-screen">
-      <h1 className="text-2xl font-semibold mb-4">My Tickets</h1>
-      <div className="space-y-4">
-        {mockTickets.map((ticket) => {
-          const dateStr = new Date(ticket.date).toLocaleString();
-          return (
-            <div
-              key={ticket.id}
-              className="flex bg-white rounded-xl shadow-md overflow-hidden border border-gray-200"
+    <Box sx={{ minHeight: "100vh", background: "#f5f5f5" }}>
+      {/* STICKY TOP BAR */}
+      <AppBar
+        position="sticky"
+        elevation={1}
+        sx={{
+          background: "#1f262d",
+          top: 0,
+          width: "100%",
+        }}
+      >
+        <Toolbar sx={{ position: "relative" }}>
+          {/* LEFT CLOSE BUTTON */}
+          <Box sx={{ mr: "auto", pt: 2 }}>
+            <IconButton
+              edge="start"
+              aria-label="close"
+              onClick={() => navigate("/sell")}
+              sx={{ color: "white" }}
             >
-              {/* Event image */}
-              <div className="w-24 sm:w-32 h-24 sm:h-32 flex-shrink-0">
-                <img
-                  src={ticket.image}
-                  alt={ticket.event}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <ArrowBack />
+            </IconButton>
+          </Box>
 
-              {/* Ticket details */}
-              <div className="flex-1 p-3 flex flex-col justify-between">
-                <div>
-                  <h2 className="font-semibold text-lg line-clamp-2">
-                    {ticket.event}
-                  </h2>
-                  <p className="text-sm text-gray-500 mt-1">{dateStr}</p>
-                  <p className="text-sm text-gray-500 mt-1">{ticket.venue}</p>
-                  <p className="text-sm text-gray-700 mt-2">{ticket.seat}</p>
-                </div>
-              </div>
+          {/* CENTER TITLE */}
+          <Box
+            sx={{
+              position: "absolute",
+              left: "50%",
+              transform: "translateX(-50%)",
+              pt: 1,
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                fontSize: 15,
+                color: "#ffffff",
+                textAlign: "center",
+                pt: 1,
+                pr: 2,
+              }}
+            >
+              Customize Ticket
+            </Typography>
+          </Box>
 
-              {/* QR Code */}
-              <div className="w-20 sm:w-24 flex items-center justify-center bg-gray-50 p-2">
-                <QRCodeCanvas value={ticket.code} size={64} />
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
+          {/* RIGHT RESET BUTTON */}
+          <Box sx={{ ml: "auto", pt: 2 }}>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#ff2b00",
+                  color: "#ffffff",
+                  fontWeight: 600,
+                  fontSize: 10,
+                  textTransform: "none",
+                  minWidth: "auto",
+                  px: 1.5,
+                  py: 0.7,
+                  borderRadius: "4px",
+                  "&:hover": {
+                    backgroundColor: "#cc0000",
+                  },
+                }}
+              >
+                Reset App
+              </Button>
+          </Box>
+        </Toolbar>
+      </AppBar>
+
+      {/* EMPTY BODY */}
+      <Box sx={{ p: 3 }}></Box>
+    </Box>
   );
 }
+
 
 

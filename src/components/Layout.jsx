@@ -28,7 +28,7 @@ const Layout = () => {
       </Box>
 
       {/* Bottom Navigation */}
-      {!(location.pathname === "/ticket" || location.pathname === "/update-details") && (
+      {!(location.pathname === "/mytickets" || location.pathname === "/foryou") && (
         <BottomNavBar />
       )}
     </Box>
