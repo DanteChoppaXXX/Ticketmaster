@@ -1,7 +1,14 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Box, Link, Avatar } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box, Link, Avatar, Grid } from "@mui/material";
+import ImgCard from "../components/ImgCard";
+import { useEvent } from "../context/EventContext";
 
-export default function MyEvents() {
+const MyEvents = () => {
+  const { events } = useEvent();
+
+  // Make sure events is an array; if not, wrap it in an array
+  const eventList = Array.isArray(events) ? events : [events];
+
   return (
     <Box sx={{ minHeight: "100vh", background: "#f5f5f5" }}>
       {/* STICKY TOP BAR */}
@@ -26,8 +33,7 @@ export default function MyEvents() {
               pt: 2,
             }}
           >
-
-           <Typography
+            <Typography
               variant="h6"
               sx={{
                 fontWeight: 600,
@@ -38,14 +44,15 @@ export default function MyEvents() {
             >
               My Events
             </Typography>
-      
+
             <Avatar
               src="https://flagcdn.com/us.svg"
               alt="US Flag"
               sx={{
-                width: 16,
-                height: 16,
-                marginLeft: 0.5,
+                width: 20,
+                height: 20,
+                marginLeft: 1,
+                borderRadius: "50%",
               }}
             />
           </Box>
@@ -63,9 +70,13 @@ export default function MyEvents() {
         </Toolbar>
       </AppBar>
 
-      {/* EMPTY BODY */}
-      <Box sx={{ p: 2 }}></Box>
+      {/* BODY */}
+      <Box sx={{ p: 0.7 }}>
+        <ImgCard /> {/* Context-aware ImgCard; no props needed */}
+      </Box>
     </Box>
   );
-}
+};
+
+export default MyEvents;
 

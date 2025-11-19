@@ -20,7 +20,7 @@ const BottomNavBar = () => {
   const pathToValue = {
     "/home": "discover",
     "/foryou": "for-you",
-    "/myevents": "my-tickets",
+    "/myevents": "my-events",
     "/sell": "sell",
     "/myaccount": "account",
   };
@@ -86,9 +86,9 @@ const BottomNavBar = () => {
         />
 
         <BottomNavigationAction
-          label="My Tickets"
-          value="my-tickets"
-          icon={<img src={value === "my-tickets" ? activeMyEventIcon : myEventIcon} style={{ width: 18 }} />}
+          label="My Events"
+          value="my-events"
+          icon={<img src={value === "my-events" ? activeMyEventIcon : myEventIcon} style={{ width: 18 }} />}
           component={Link}
           to="/myevents"
           sx={{ "& .MuiBottomNavigationAction-label": { fontSize: 8 } }}

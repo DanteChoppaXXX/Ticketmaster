@@ -10,8 +10,9 @@ import {
 } from "@mui/material";
 import ArrowBack from "@mui/icons-material/ArrowBackIosNew";
 import { useNavigate } from "react-router-dom";
+import CustomizeTicket from "../components/CustomizeTicket"
 
-export default function MyTickets() {
+export default function Customize({events, onUpdate}) {
   const navigate = useNavigate();
 
   return (
@@ -89,7 +90,7 @@ export default function MyTickets() {
       </AppBar>
 
       {/* EMPTY BODY */}
-      <Box sx={{ p: 3 }}></Box>
+      <CustomizeTicket events={events} onUpdate={onUpdate} />   
     </Box>
   );
 }
