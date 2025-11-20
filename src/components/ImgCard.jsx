@@ -21,7 +21,7 @@ const ImgCard = () => {
       sx={{
         position: "relative",
         width: "100%",
-        borderRadius: 1,
+        borderRadius: 0,
         overflow: "hidden",
         cursor: "pointer",
         minHeight: 220,

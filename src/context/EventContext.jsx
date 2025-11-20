@@ -21,6 +21,7 @@ const defaultEvent = {
     location: "Rogers Center, Toronto, ON",
   },
   countdown: "08 15 2022, 08:00pm",
+  seating: "METLIFE GATE",
   seatMap: [
     { sec: "A3", row: "10", seat: "5" },
     { sec: "A3", row: "10", seat: "6" },
