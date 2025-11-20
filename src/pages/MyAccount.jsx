@@ -4,14 +4,25 @@ import {
   Toolbar,
   Typography,
   Box,
-  Link,
   IconButton,
+  Button,
 } from "@mui/material";
 import Close from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
 
-export default function MyTickets() {
+export default function MyAccount() {
   const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate("/login"); // redirect to login page after logout
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
 
   return (
     <Box sx={{ minHeight: "100vh", background: "#f5f5f5" }}>
@@ -60,6 +71,28 @@ export default function MyTickets() {
               My Account
             </Typography>
           </Box>
+
+          {/* RIGHT LOGOUT BUTTON */}
+          <Box sx={{ ml: "auto", pt: 1 }}>
+            <Button
+              variant="outlined"
+              color="inherit"
+              size="small"
+              onClick={handleLogout}
+              sx={{
+                borderColor: "white",
+                color: "white",
+                textTransform: "none",
+                fontSize: 12,
+                "&:hover": {
+                  borderColor: "#f5f5f5",
+                  backgroundColor: "rgba(255,255,255,0.1)",
+                },
+              }}
+            >
+              Logout
+            </Button>
+          </Box>
         </Toolbar>
       </AppBar>
 
@@ -68,7 +101,4 @@ export default function MyTickets() {
     </Box>
   );
 }
-
-
-
 

@@ -12,7 +12,7 @@ import Close from "@mui/icons-material/Close";
 import Add from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 
-export default function MyTickets() {
+export default function ManageTicket() {
   const navigate = useNavigate();
 
   return (
