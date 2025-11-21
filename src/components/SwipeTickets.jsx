@@ -101,8 +101,8 @@ export default function SwipeTickets() {
         ref={containerRef}
         sx={{
           display: "flex",
-          gap: 1,
-          px: 1,
+          gap: 2,
+          px: 2,
           overflowX: "auto",
           scrollSnapType: "x mandatory",
           WebkitOverflowScrolling: "touch", // iOS momentum

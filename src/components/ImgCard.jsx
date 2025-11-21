@@ -5,14 +5,14 @@ import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import { useEvent } from "../context/EventContext";
 
 const ImgCard = () => {
-  const { events } = useEvent(); // get event details from context
+  const { events } = useEvent(); // single event object
   const navigate = useNavigate();
+
+  if (!events) return null; // safety check
 
   const handleClick = () => {
     navigate("/mytickets");
   };
-
-  if (!events) return null; // safety check
 
   return (
     <Card
@@ -37,8 +37,7 @@ const ImgCard = () => {
         alt={events.name}
         sx={{
           width: "100%",
-          height: 0,
-          paddingTop: "56.25%", // 16:9 ratio
+          height: "100%",
           objectFit: "cover",
         }}
       />

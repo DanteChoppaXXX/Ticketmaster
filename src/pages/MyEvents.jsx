@@ -1,13 +1,22 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Box, Link, Avatar, Grid } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Link,
+  Avatar,
+  Grid,
+  CircularProgress,
+} from "@mui/material";
 import ImgCard from "../components/ImgCard";
 import { useEvent } from "../context/EventContext";
 
 const MyEvents = () => {
-  const { events } = useEvent();
+  const { event, loading } = useEvent();
 
-  // Make sure events is an array; if not, wrap it in an array
-  const eventList = Array.isArray(events) ? events : [events];
+  // Ensure events is an array
+ // const eventList = Array.isArray(events) ? events : [events];
 
   return (
     <Box sx={{ minHeight: "100vh", background: "#f5f5f5" }}>
@@ -72,7 +81,19 @@ const MyEvents = () => {
 
       {/* BODY */}
       <Box sx={{ p: 0.7 }}>
-        <ImgCard /> {/* Context-aware ImgCard; no props needed */}
+        {loading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              mt: 5,
+            }}
+          >
+            <CircularProgress size={40} />
+          </Box>
+        ) : (
+             <ImgCard event={event} />
+        )}
       </Box>
     </Box>
   );

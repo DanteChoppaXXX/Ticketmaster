@@ -11,11 +11,8 @@ import {
   IconButton,
   Divider,
   Avatar,
-  Paper,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import VerifiedIcon from "@mui/icons-material/Verified";
-import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 
 import walletIcon from "../icons/icon_wallet.svg";
 import verified from "../assets/ver.png";
@@ -25,15 +22,24 @@ import { useEvent } from "../context/EventContext";
 export default function CustomizeTicket() {
   const { events, updateEvent } = useEvent();
 
-  const [formData, setFormData] = useState(events);
+  const [formData, setFormData] = useState({
+    ...events,
+    seatMap: events.seatMap || [],
+  });
   const [previewImg, setPreviewImg] = useState(events.image);
   const [toastOpen, setToastOpen] = useState(false);
 
-  // Sync context → local form
-  useEffect(() => {
-    setFormData(events);
-    setPreviewImg(events.image);
-  }, [events]);
+  // Sync context → local form safely
+     useEffect(() => {
+      if (!events || events.length === 0) return;
+      const currentEvent = Array.isArray(events) ? events[0] : events;
+      setFormData({
+        ...currentEvent,
+        seatMap: currentEvent.seatMap || [],
+        id: currentEvent.id, // <--- important
+      });
+      setPreviewImg(currentEvent.image);
+    }, [events]);
 
   // ------------------------------------------
   // HANDLE INPUT CHANGE
@@ -63,7 +69,7 @@ export default function CustomizeTicket() {
   // HANDLE SEAT CHANGES
   // ------------------------------------------
   const handleSeatChange = (index, key, value) => {
-    const updatedSeats = [...formData.seatMap];
+    const updatedSeats = [...(formData.seatMap || [])];
     updatedSeats[index][key] = value;
 
     setFormData((prev) => ({
@@ -75,12 +81,12 @@ export default function CustomizeTicket() {
   const addSeat = () => {
     setFormData((prev) => ({
       ...prev,
-      seatMap: [...prev.seatMap, { sec: "", row: "", seat: "" }],
+      seatMap: [...(prev.seatMap || []), { sec: "", row: "", seat: "" }],
     }));
   };
 
   const removeSeat = (index) => {
-    const updatedSeats = formData.seatMap.filter((_, i) => i !== index);
+    const updatedSeats = (formData.seatMap || []).filter((_, i) => i !== index);
     setFormData((prev) => ({
       ...prev,
       seatMap: updatedSeats,
@@ -88,13 +94,17 @@ export default function CustomizeTicket() {
   };
 
   // ------------------------------------------
-  // SAVE CHANGES
+  // SAVE CHANGES → update Firestore via EventContext
   // ------------------------------------------
-  const handleSave = () => {
-    updateEvent(formData);
-    setToastOpen(true);
-  };
-
+ 
+    const handleSave = async () => {
+      console.log("Save clicked", formData);
+      if (!formData.id) return console.error("Missing ID!");
+      await updateEvent(formData.id, formData);
+      console.log("Event updated!");
+      setToastOpen(true);
+    };
+        
   return (
     <Box
       sx={{
@@ -145,7 +155,7 @@ export default function CustomizeTicket() {
           <TextField fullWidth label="Event Name" name="name" value={formData.name} onChange={handleChange} sx={{ mb: 2 }} />
           <TextField fullWidth label="Ticket Title" name="title" value={formData.title} onChange={handleChange} sx={{ mb: 2 }} />
           <TextField fullWidth label="Date & Venue" name="date" value={formData.date} onChange={handleChange} sx={{ mb: 2 }} />
-          <TextField fullWidth label="Client Name" name="clientName" value={formData.clientName} onChange={handleChange} sx={{ mb: 2 }} />
+          <TextField fullWidth label="Seating" name="seating" value={formData.seating} onChange={handleChange} sx={{ mb: 2 }} />
           <TextField fullWidth label="Ticket Count" type="number" name="tix" value={formData.tix} onChange={handleChange} sx={{ mb: 2 }} />
 
           <Divider sx={{ my: 3 }} />
@@ -153,7 +163,7 @@ export default function CustomizeTicket() {
           {/* SEAT MANAGEMENT */}
           <Typography sx={{ mb: 1, fontWeight: "bold" }}>Seat Map</Typography>
 
-          {formData.seatMap.map((seat, index) => (
+          {(formData.seatMap || []).map((seat, index) => (
             <Box key={index} sx={{ display: "flex", gap: 2, alignItems: "center", mb: 2 }}>
               <TextField label="Section" value={seat.sec} onChange={(e) => handleSeatChange(index, "sec", e.target.value)} />
               <TextField label="Row" value={seat.row} onChange={(e) => handleSeatChange(index, "row", e.target.value)} />
@@ -173,30 +183,7 @@ export default function CustomizeTicket() {
         </CardContent>
       </Card>
 
-      {/* RIGHT — LIVE PREVIEW */}
-      {/* RIGHT — LIVE PREVIEW */}
-<Box
-  sx={{
-    width: "100%",
-    maxWidth: 380,
-    height: "fit-content",
-    borderRadius: 3,
-    overflow: "hidden",
-  }}
->
-  <Typography
-    variant="subtitle2"
-    sx={{
-      color: "#1877F2",
-      fontWeight: 700,
-      mb: 1,
-      textAlign: "center",
-    }}
-  >
-    Live Ticket Preview
-  </Typography>
-
-  {/* FULL TICKET PREVIEW — matches TicketCard UI */}
+      {/* FULL TICKET PREVIEW — matches TicketCard UI */}
   <Box
     sx={{
       width: "100%",
@@ -326,7 +313,7 @@ export default function CustomizeTicket() {
         variant="contained"
         sx={{
           background: "#1a1a1a",
-          width: "65%",
+          width: "70%",
           borderRadius: 2,
           textTransform: "none",
           fontWeight: 500,
@@ -385,11 +372,17 @@ export default function CustomizeTicket() {
       />
     </Box>
   </Box>
-</Box>
 
       {/* SUCCESS TOAST */}
-      <Snackbar open={toastOpen} autoHideDuration={2000} onClose={() => setToastOpen(false)} anchorOrigin={{ vertical: "top", horizontal: "right" }}>
-        <Alert severity="success" variant="filled">Event updated successfully!</Alert>
+      <Snackbar
+        open={toastOpen}
+        autoHideDuration={2000}
+        onClose={() => setToastOpen(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert severity="success" variant="filled">
+          Event updated successfully!
+        </Alert>
       </Snackbar>
     </Box>
   );

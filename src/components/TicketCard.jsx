@@ -136,7 +136,7 @@ export default function TicketCard({ event, seatInfo }) {
           fontSize: 15,
         }}
       >
-        SECTION {seat.sec}
+        {ticket.seating}
       </Typography>
 
       {/* Add to Apple Wallet */}
@@ -145,7 +145,7 @@ export default function TicketCard({ event, seatInfo }) {
           variant="contained"
           sx={{
             background: "#1a1a1a",
-            width: "65%",
+            width: "70%",
             borderRadius: 2,
             textTransform: "none",
             fontWeight: 500,

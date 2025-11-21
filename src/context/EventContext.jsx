@@ -1,4 +1,7 @@
+// src/context/EventContext.jsx
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { collection, getDocs, addDoc, setDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
 import Tswift from "../assets/Tswift.jpg";
 
 const EventContext = createContext();
@@ -9,7 +12,6 @@ const defaultEvent = {
   title: "Verified Resale Ticket",
   image: Tswift,
   user: "example@gmail.com",
-  success: true,
   userName: "Daniska",
   clientName: "Buyer-name(buyer-email@gmail.com)",
   taxFee: 100,
@@ -29,19 +31,44 @@ const defaultEvent = {
 };
 
 export const EventProvider = ({ children }) => {
-  const [events, setEvents] = useState(() => {
-    const saved = localStorage.getItem("events");
-    return saved ? JSON.parse(saved) : defaultEvent;
-  });
+  const [events, setEvents] = useState([]);
 
-  // Auto-save on changes
+  // Load events from Firestore
   useEffect(() => {
-    localStorage.setItem("events", JSON.stringify(events));
-  }, [events]);
+    const fetchEvents = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, "events"));
+        if (snapshot.empty) {
+          // Seed default event if Firestore is empty
+          const docRef = await addDoc(collection(db, "events"), defaultEvent);
+          setEvents([{ id: docRef.id, ...defaultEvent }]);
+        } else {
+          const fetchedEvents = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setEvents(fetchedEvents);
+        }
+      } catch (err) {
+        console.error("Error fetching events:", err);
+        setEvents([defaultEvent]); // fallback to local default
+      }
+    };
 
-  const updateEvent = (updatedEvent) => {
-    setEvents(updatedEvent);
-  };
+    fetchEvents();
+  }, []);
+
+  // Update event in Firestore
+  const updateEvent = async (id, updatedEvent) => {
+    try {
+      if (!id) throw new Error("Missing event ID for Firestore update");
+      await setDoc(doc(db, "events", id), updatedEvent, { merge: true });
+      // Update local state
+      setEvents(updatedEvent);
+    } catch (err) {
+      console.error("Failed to update event:", err);
+    }
+  }; 
 
   return (
     <EventContext.Provider value={{ events, updateEvent }}>
@@ -50,6 +77,6 @@ export const EventProvider = ({ children }) => {
   );
 };
 
-// Custom hook to access event data easily
+// Custom hook
 export const useEvent = () => useContext(EventContext);
 
