@@ -5,90 +5,85 @@ import {
   Divider,
   Typography,
   TextField,
-  IconButton,
   Button,
 } from "@mui/material";
-import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { useEvent } from "../context/EventContext";
 
-const CustomForm = () => {
-  const number = 4;
-  const section = "506";
-  const row = "5";
-  const seat = "7 - 8";
-  const section01 = "544";
-  const row01 = "20";
-  const seat01 = "20 - 21";
+const CustomForm = ({ onClose, openTransferTo }) => {
+  const { selectedEvent } = useEvent();
+
+  if (!selectedEvent) return null;
+
+  const seatMap = selectedEvent.seatMap || [];
+  const number = seatMap.length;
+
+  const section = seatMap[0]?.sec || "-";
+  const row = seatMap[0]?.row || "-";
+
+  const seatList = seatMap.map((s) => s.seat);
+  const seatDisplay =
+    seatList.length === 1
+      ? seatList[0]
+      : seatList.length > 1
+      ? `${seatList[0]} - ${seatList[seatList.length - 1]}`
+      : "-";
+
+  // HANDLES BACK BUTTON
+  const handleBack = () => {
+    onClose();          // close current slide
+    openTransferTo();   // open TransferTo slide
+  };
 
   return (
     <Box sx={{ p: 0 }}>
-      {/* Header */}
-      <Box sx={{ textAlign: "center", mb: 0.5, mt: 0.5}}>
+      <Box sx={{ textAlign: "center", mb: 0.5, mt: 0.5 }}>
         <Typography variant="h6">TRANSFER TICKETS</Typography>
       </Box>
       <Divider />
 
       <Container sx={{ mt: 2 }}>
-        {/* Ticket Info */}
         <Box mb={2}>
-          <Typography variant="body1" gutterBottom>
-            {number} Ticket(s) Selected
-          </Typography>
-
-          <Typography variant="body1" gutterBottom>
-            <span style={{ color: "grey" }}>Sec</span> {section01}{" "}
-            <span style={{ color: "grey" }}>Row</span> {row01}{" "}
-            <span style={{ color: "grey" }}>Seat</span> {seat01}
-          </Typography>
-
-          <Typography variant="body1" gutterBottom>
+          <Typography>{number} Ticket(s) Selected</Typography>
+          <Typography>
             <span style={{ color: "grey" }}>Sec</span> {section}{" "}
             <span style={{ color: "grey" }}>Row</span> {row}{" "}
-            <span style={{ color: "grey" }}>Seat</span> {seat}
+            <span style={{ color: "grey" }}>Seat</span> {seatDisplay}
           </Typography>
         </Box>
 
-        {/* Form Fields */}
         <form>
           <Box mb={2}>
-            <Typography variant="body2" gutterBottom>
-              First Name
-            </Typography>
-            <TextField size="small" placeholder="First Name" variant="outlined" fullWidth />
+            <Typography variant="body2">First Name</Typography>
+            <TextField fullWidth size="small" placeholder="First Name" />
           </Box>
 
           <Box mb={2}>
-            <Typography variant="body2" gutterBottom>
-              Last Name
-            </Typography>
-            <TextField size="small" placeholder="Last Name" variant="outlined" fullWidth />
+            <Typography variant="body2">Last Name</Typography>
+            <TextField fullWidth size="small" placeholder="Last Name" />
           </Box>
 
           <Box mb={2}>
-            <Typography variant="body2" gutterBottom>
-              Email or Mobile Number
-            </Typography>
+            <Typography variant="body2">Email or Mobile Number</Typography>
             <TextField
+              fullWidth
               size="small"
               placeholder="Email or Mobile Number"
-              variant="outlined"
-              fullWidth
             />
           </Box>
 
           <Box mb={2}>
-            <Typography variant="body2" gutterBottom>
-              Note
-            </Typography>
-            <TextField size="small" variant="outlined" fullWidth />
+            <Typography variant="body2">Note</Typography>
+            <TextField fullWidth size="small" />
           </Box>
         </form>
 
-        {/* Buttons */}
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-          <IconButton sx={{ color: "#026AE1" }}>
-            <ArrowBackIosOutlinedIcon />
+          <Button onClick={handleBack} sx={{ textTransform: "none" }}>
+            <ChevronLeftIcon />
             BACK
-          </IconButton>
+          </Button>
+
           <Button
             variant="contained"
             sx={{ bgcolor: "#026AE1", color: "#fff", textTransform: "capitalize" }}
@@ -102,3 +97,4 @@ const CustomForm = () => {
 };
 
 export default CustomForm;
+

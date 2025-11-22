@@ -6,7 +6,6 @@ import Tswift from "../assets/Tswift.jpg";
 
 const EventContext = createContext();
 
-// Default event fallback
 const defaultEvent = {
   name: "Taylor Swift | The Eras Tour",
   title: "Verified Resale Ticket",
@@ -32,51 +31,64 @@ const defaultEvent = {
 
 export const EventProvider = ({ children }) => {
   const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null); // ← ADDED
 
-  // Load events from Firestore
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const snapshot = await getDocs(collection(db, "events"));
+
         if (snapshot.empty) {
-          // Seed default event if Firestore is empty
           const docRef = await addDoc(collection(db, "events"), defaultEvent);
-          setEvents([{ id: docRef.id, ...defaultEvent }]);
+          const seededEvent = { id: docRef.id, ...defaultEvent };
+          setEvents([seededEvent]);
+          setSelectedEvent(seededEvent); // ← SET DEFAULT AS SELECTED
         } else {
           const fetchedEvents = snapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
           }));
           setEvents(fetchedEvents);
+          setSelectedEvent(fetchedEvents[0]); // ← AUTO SELECT FIRST EVENT
         }
+
       } catch (err) {
         console.error("Error fetching events:", err);
-        setEvents([defaultEvent]); // fallback to local default
+        setEvents([defaultEvent]);
+        setSelectedEvent(defaultEvent);
       }
     };
 
     fetchEvents();
   }, []);
 
-  // Update event in Firestore
   const updateEvent = async (id, updatedEvent) => {
     try {
-      if (!id) throw new Error("Missing event ID for Firestore update");
       await setDoc(doc(db, "events", id), updatedEvent, { merge: true });
-      // Update local state
-      setEvents(updatedEvent);
+      setEvents((prev) =>
+        prev.map((ev) => (ev.id === id ? { ...ev, ...updatedEvent } : ev))
+      );
+      setSelectedEvent((ev) =>
+        ev?.id === id ? { ...ev, ...updatedEvent } : ev
+      );
     } catch (err) {
       console.error("Failed to update event:", err);
     }
-  }; 
+  };
 
   return (
-    <EventContext.Provider value={{ events, updateEvent }}>
+    <EventContext.Provider
+      value={{
+        events,
+        selectedEvent,
+        setSelectedEvent,
+        updateEvent,
+      }}
+    >
       {children}
     </EventContext.Provider>
   );
 };
 
-// Custom hook
 export const useEvent = () => useContext(EventContext);
 

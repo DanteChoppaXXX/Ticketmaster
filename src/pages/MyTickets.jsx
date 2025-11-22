@@ -15,6 +15,7 @@ import SwipeTickets from "../components/SwipeTickets";
 import SlideUpForm from "../components/SlideUpForm";
 import TransferForm from "../components/TransferForm";
 import TransferTo from "../components/TransferTo";
+import SelectSeat from "../components/SelectSeat";
 
 export default function MyTickets() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function MyTickets() {
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
+
 
   // Redirect if no event exists
   useEffect(() => {
@@ -126,7 +128,16 @@ export default function MyTickets() {
           </Button>
         </Box>
       </Box>
-      <TransferTo open={open} onClose={() => setOpen(false)} />
+
+      <SelectSeat
+        open={open}
+        onClose={() => setOpen(false)}
+        onProceed={(selected) => {
+          console.log("Selected seats:", selected);
+          setOpen(false);
+        }}
+      />  
+      {/*<TransferTo open={open} onClose={() => setOpen(false)} /> */}
       {/* SLIDE-UP FORM 
       <SlideUpForm open={open} onClose={handleDrawerClose}>
         <TransferForm onClose={handleDrawerClose} />
