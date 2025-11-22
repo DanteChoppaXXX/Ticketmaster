@@ -20,9 +20,9 @@ const CustomForm = () => {
   const seat01 = "20 - 21";
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 0 }}>
       {/* Header */}
-      <Box sx={{ textAlign: "center", mb: 1 }}>
+      <Box sx={{ textAlign: "center", mb: 0.5, mt: 0.5}}>
         <Typography variant="h6">TRANSFER TICKETS</Typography>
       </Box>
       <Divider />
@@ -53,14 +53,14 @@ const CustomForm = () => {
             <Typography variant="body2" gutterBottom>
               First Name
             </Typography>
-            <TextField size="small" label="First Name" variant="outlined" fullWidth />
+            <TextField size="small" placeholder="First Name" variant="outlined" fullWidth />
           </Box>
 
           <Box mb={2}>
             <Typography variant="body2" gutterBottom>
               Last Name
             </Typography>
-            <TextField size="small" label="Last Name" variant="outlined" fullWidth />
+            <TextField size="small" placeholder="Last Name" variant="outlined" fullWidth />
           </Box>
 
           <Box mb={2}>
@@ -69,7 +69,7 @@ const CustomForm = () => {
             </Typography>
             <TextField
               size="small"
-              label="Email or Mobile Number"
+              placeholder="Email or Mobile Number"
               variant="outlined"
               fullWidth
             />
@@ -87,6 +87,7 @@ const CustomForm = () => {
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
           <IconButton sx={{ color: "#026AE1" }}>
             <ArrowBackIosOutlinedIcon />
+            BACK
           </IconButton>
           <Button
             variant="contained"

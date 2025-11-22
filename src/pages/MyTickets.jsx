@@ -10,18 +10,21 @@ import {
 } from "@mui/material";
 import Close from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
-import { useEvent } from "../context/EventContext";   // ⬅️ bring in the event context
+import { useEvent } from "../context/EventContext";
 import SwipeTickets from "../components/SwipeTickets";
+import SlideUpForm from "../components/SlideUpForm";
+import TransferForm from "../components/TransferForm";
+import TransferTo from "../components/TransferTo";
 
 export default function MyTickets() {
   const navigate = useNavigate();
-  const { events } = useEvent();   // ⬅️ your event data
+  const { events } = useEvent();
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
 
-  // If no event exists, redirect user
+  // Redirect if no event exists
   useEffect(() => {
     if (!events || (Array.isArray(events) && events.length === 0)) {
       navigate("/myevents");
@@ -87,7 +90,6 @@ export default function MyTickets() {
 
       {/* BODY */}
       <Box sx={{ pt: 0.5, ml: 1 }}>
-        {/* TICKETS FROM CONTEXT */}
         <SwipeTickets />
 
         {/* TRANSFER + SELL BUTTONS */}
@@ -116,7 +118,7 @@ export default function MyTickets() {
               textTransform: "none",
               fontWeight: 600,
               color: "#ffffff",
-              "&:hover": { background: "#dddddd" },
+              "&:hover": { background: "#cccccc" },
               mr: 2,
             }}
           >
@@ -124,6 +126,11 @@ export default function MyTickets() {
           </Button>
         </Box>
       </Box>
+      <TransferTo open={open} onClose={() => setOpen(false)} />
+      {/* SLIDE-UP FORM 
+      <SlideUpForm open={open} onClose={handleDrawerClose}>
+        <TransferForm onClose={handleDrawerClose} />
+      </SlideUpForm> */}
     </Box>
   );
 }
