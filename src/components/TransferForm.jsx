@@ -106,7 +106,7 @@ const TransferForm = ({ onClose, openTransferTo, open, selectedSeats }) => {
               justifyContent: "space-between",
               mt: 3,
               mb: 2,
-              bgcolor: "#fafafa",
+              bgcolor: "#ffffff",
               p: 1,
               borderRadius: 1,
             }}

@@ -98,7 +98,7 @@ export default function TransferTo({ open, onClose, onManualEntry, onBack }) {
           </Box>
 
           {/* Back Button */}
-          <Box mt={4} mb={2} textAlign="left" bgcolor="#fafafa">
+          <Box mt={4} mb={2} textAlign="left" bgcolor="#ffffff">
             <Button onClick={() => { onBack && onBack(); }} sx={{ textTransform: "none" }}>
               <ChevronLeftIcon />
               BACK

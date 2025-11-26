@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -6,17 +6,21 @@ import {
   Box,
   Link,
   Avatar,
-  Grid,
+  Tabs,
+  Tab,
   CircularProgress,
 } from "@mui/material";
 import ImgCard from "../components/ImgCard";
 import { useEvent } from "../context/EventContext";
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 const MyEvents = () => {
-  const { event, loading } = useEvent();
+  const { loading, selectedEvent, events } = useEvent();
+  const [tabValue, setTabValue] = useState(0);
 
-  // Ensure events is an array
- // const eventList = Array.isArray(events) ? events : [events];
+  const handleTabChange = (e, newValue) => {
+    setTabValue(newValue);
+  };
 
   return (
     <Box sx={{ minHeight: "100vh", background: "#f5f5f5" }}>
@@ -31,7 +35,7 @@ const MyEvents = () => {
         }}
       >
         <Toolbar sx={{ position: "relative" }}>
-          {/* CENTER TITLE + FLAG AVATAR */}
+          {/* CENTER TITLE */}
           <Box
             sx={{
               display: "flex",
@@ -77,9 +81,30 @@ const MyEvents = () => {
             </Link>
           </Box>
         </Toolbar>
+
+        {/* TABS */}
+        <Tabs
+          value={tabValue}
+          onChange={handleTabChange}
+          centered
+          textColor="inherit"
+          TabIndicatorProps={{ style: { backgroundColor: "#fff" } }}
+          sx={{
+              "& .MuiTab-root": {
+                textTransform: "none",
+              },
+            background: "#1f262d",
+            color: "#fff",
+            mt: 0.5,
+            mr: 14,
+          }}
+        >
+          <Tab label="Upcoming Events" />
+          <Tab label="Past Events" />
+        </Tabs>
       </AppBar>
 
-      {/* BODY */}
+      {/* BODY CONTENT */}
       <Box sx={{ p: 0.7 }}>
         {loading ? (
           <Box
@@ -92,7 +117,30 @@ const MyEvents = () => {
             <CircularProgress size={40} />
           </Box>
         ) : (
-             <ImgCard event={event} />
+          <>
+            {/* -------- UPCOMING EVENTS TAB -------- */}
+            {tabValue === 0 && (
+              <Box sx={{ width: "100%", mt: 1 }}>
+                <ImgCard event={selectedEvent} />
+              </Box>
+            )}
+
+            {/* -------- PAST EVENTS TAB -------- */}
+            {tabValue === 1 && (
+              <Box sx={{ width: "100%", mt: 1 }}>
+                <Typography
+                  sx={{
+                    textAlign: "center",
+                    color: "#666",
+                    mt: 4,
+                    fontSize: 14,
+                  }}
+                >
+                  No past events yet.
+                </Typography>
+              </Box>
+            )}
+          </>
         )}
       </Box>
     </Box>
