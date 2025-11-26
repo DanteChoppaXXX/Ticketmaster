@@ -7,8 +7,9 @@ import {
   Paper,
 } from "@mui/material";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
-import LoadingScreen from "../components/LoadingScreen"; // import your spinner
+import { auth, db } from "../firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import LoadingScreen from "../components/LoadingScreen";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -16,21 +17,42 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // 🔥 create Firestore user if missing
+  const ensureUserDocument = async (user) => {
+    const userRef = doc(db, "users", user.uid);
+    const snapshot = await getDoc(userRef);
+
+    if (!snapshot.exists()) {
+      await setDoc(userRef, {
+        uid: user.uid,
+        email: user.email,
+        username: user.email.split("@")[0],
+        createdAt: new Date(),
+      });
+      console.log("User document created in Firestore");
+    }
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      // Redirect handled by PublicRoute logic
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // 🔥 ensure Firestore profile exists
+      await ensureUserDocument(user);
+
+      // Redirect handled by PublicRoute
     } catch (err) {
       setError("Invalid email or password.");
-      setLoading(false); // hide loading screen if failed
+      setLoading(false);
     }
   };
 
-  // Show full-screen spinner while submitting
+  // Show full-screen spinner
   if (loading) return <LoadingScreen />;
 
   return (

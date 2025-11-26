@@ -1,43 +1,48 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Typography,
   Slide,
   Divider,
-  IconButton,
-  Paper,
   Button
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ConfirmationNumberSharpIcon from "@mui/icons-material/ConfirmationNumberSharp";
 import { useEvent } from "../context/EventContext";
-import TransferTo from "../components/TransferTo";
 
-export default function TransferTicketSelector({ open, onClose }) {
-  const { selectedEvent } = useEvent();
+export default function SelectSeat({ open, onClose, onContinue }) {
+  const { selectedEvent, selectedSeats, setSelectedSeats } = useEvent();
+
   const seatMap = selectedEvent?.seatMap || [];
-
   const sec = seatMap[0]?.sec || "—";
   const row = seatMap[0]?.row || "—";
 
-  const [selectedSeats, setSelectedSeats] = useState([]);
-  const [transferOpen, setTransferOpen] = useState(false);
-
-  const toggleSeat = (index) => {
-    setSelectedSeats((prev) =>
-      prev.includes(index)
-        ? prev.filter((i) => i !== index)
-        : [...prev, index]
-    );
-  };
-
   const selectedCount = selectedSeats.length;
+
+  // MULTI-SELECT toggle
+  const toggleSeat = (seatObj) => {
+    const exists = selectedSeats.some(
+      (s) =>
+        s.sec === seatObj.sec &&
+        s.row === seatObj.row &&
+        s.seat === seatObj.seat
+    );
+
+    if (exists) {
+      setSelectedSeats(
+        selectedSeats.filter(
+          (s) =>
+            !(s.sec === seatObj.sec && s.row === seatObj.row && s.seat === seatObj.seat)
+        )
+      );
+    } else {
+      setSelectedSeats([...selectedSeats, seatObj]);
+    }
+  };
 
   return (
     <>
-      {/* Main Slide Drawer */}
       <Slide direction="up" in={open} mountOnEnter unmountOnExit>
         <Box
           sx={{
@@ -67,13 +72,6 @@ export default function TransferTicketSelector({ open, onClose }) {
             <Typography fontWeight={500} fontSize={14}>
               SELECT TICKETS TO TRANSFER
             </Typography>
-
-            <IconButton
-              onClick={onClose}
-              sx={{ position: "absolute", right: 8, top: 6 }}
-            >
-              <CloseIcon />
-            </IconButton>
           </Box>
 
           <Divider />
@@ -85,14 +83,25 @@ export default function TransferTicketSelector({ open, onClose }) {
               mt: 2,
               display: "flex",
               justifyContent: "space-between",
+              alignItems: "center"
             }}
           >
             <Typography fontWeight={500} sx={{ opacity: 0.8 }}>
               Sec {sec}, Row {row}
             </Typography>
 
+            <ConfirmationNumberSharpIcon
+              fontSize="small"
+              sx={{
+                mt: 0.2,
+                ml: 14,
+                transform: "rotate(-45deg) scaleY(0.7)",
+                opacity: 0.7
+              }}
+            />
+
             <Typography sx={{ opacity: 0.6 }}>
-              {seatMap.length} tickets
+              {seatMap.length} ticket{seatMap.length > 1 ? "s" : ""}
             </Typography>
           </Box>
 
@@ -108,12 +117,17 @@ export default function TransferTicketSelector({ open, onClose }) {
             }}
           >
             {seatMap.map((seatObj, index) => {
-              const isSelected = selectedSeats.includes(index);
+              const isSelected = selectedSeats.some(
+                (s) =>
+                  s.sec === seatObj.sec &&
+                  s.row === seatObj.row &&
+                  s.seat === seatObj.seat
+              );
 
               return (
                 <Box
                   key={index}
-                  onClick={() => toggleSeat(index)}
+                  onClick={() => toggleSeat(seatObj)}
                   sx={{
                     width: 75,
                     height: 80,
@@ -128,7 +142,7 @@ export default function TransferTicketSelector({ open, onClose }) {
                     userSelect: "none",
                   }}
                 >
-                  {/* TOP (BLUE SECTION) */}
+                  {/* TOP BLUE */}
                   <Box
                     sx={{
                       height: "40%",
@@ -177,16 +191,8 @@ export default function TransferTicketSelector({ open, onClose }) {
               );
             })}
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              gap: 2,
-              px: 2.5,
-              mt: 2,
-              flexWrap: "wrap",
-              pb: 21,
-            }}
-          />
+
+          <Box sx={{ mb: 24 }} />
 
           {/* BOTTOM ACTION BAR */}
           <Box
@@ -195,7 +201,7 @@ export default function TransferTicketSelector({ open, onClose }) {
               bottom: 0,
               left: 0,
               width: "100%",
-              bgcolor: "#f0f0f0",
+              bgcolor: "#fafafa",
               p: 2.5,
               display: "flex",
               justifyContent: "space-between",
@@ -203,18 +209,13 @@ export default function TransferTicketSelector({ open, onClose }) {
               pb: "calc(env(safe-area-inset-bottom) + 16px)",
             }}
           >
-            <Typography fontWeight={500}>
-              {selectedCount} Selected
-            </Typography>
+            <Typography fontWeight={500}>{selectedCount} Selected</Typography>
 
             <Button
               variant="text"
               disabled={selectedCount === 0}
               endIcon={<ChevronRightIcon />}
-              onClick={() => {
-                onClose();            // CLOSE MAIN SLIDER
-                setTransferOpen(true); // OPEN TRANSFER-TO SLIDER
-              }}
+              onClick={() => onContinue(selectedSeats)}  // ⬅️ send array NOT single seat
               sx={{
                 color: selectedCount === 0 ? "#bdbdbd" : "#0077e3",
                 fontWeight: 600,
@@ -226,12 +227,6 @@ export default function TransferTicketSelector({ open, onClose }) {
           </Box>
         </Box>
       </Slide>
-
-      {/* SECOND DRAWER */}
-      <TransferTo
-        open={transferOpen}
-        onClose={() => setTransferOpen(false)}
-      />
     </>
   );
 }

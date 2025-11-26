@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Button,
@@ -6,18 +6,12 @@ import {
   Slide,
   Divider,
 } from "@mui/material";
-import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
-import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
+import PermContactCalendarOutlinedIcon from '@mui/icons-material/PermContactCalendarOutlined';
+import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
+import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
-import SlideUpForm from "../components/SlideUpForm";
-import TransferForm from "../components/TransferForm";
-
-export default function TransferBottomSlider({ open, onClose }) {
-  // State for "Manually Enter Recipient" slide-up
-  const [formOpen, setFormOpen] = useState(false);
-
+export default function TransferTo({ open, onClose, onManualEntry, onBack }) {
   return (
     <>
       {/* MAIN BOTTOM SLIDER */}
@@ -43,8 +37,8 @@ export default function TransferBottomSlider({ open, onClose }) {
           }}
         >
           {/* Header */}
-          <Box sx={{ textAlign: "center" }}>
-            <Typography variant="h6" fontSize={16}>
+          <Box sx={{ textAlign: "center" , mb: 1}}>
+            <Typography variant="h6" fontSize={14}>
               TRANSFER TO
             </Typography>
           </Box>
@@ -56,7 +50,7 @@ export default function TransferBottomSlider({ open, onClose }) {
             <Button
               fullWidth
               variant="outlined"
-              endIcon={<ContactsOutlinedIcon />}
+              endIcon={<PermContactCalendarOutlinedIcon />}
               sx={{ py: 1.1, borderRadius: "3px", borderWidth: "2px", fontSize: "12px" }}
             >
               Select From Contacts
@@ -65,11 +59,12 @@ export default function TransferBottomSlider({ open, onClose }) {
             <Button
               fullWidth
               variant="outlined"
-              endIcon={<PersonAddAltIcon />}
+              endIcon={<AddCircleOutlineRoundedIcon sx={{ fontSize: "large", opacity: 0.9 }} />}
               sx={{ py: 1.1, borderRadius: "3px", borderWidth: "2px", fontSize: "12px" }}
-              onClick={() => { 
-                onClose();       // close TransferTo slider
-                setFormOpen(true); // open TransferForm slider
+              onClick={() => {
+                // DO NOT call onClose() here — that closes the whole flow.
+                // Instead tell the controller to advance to the manual entry step.
+                onManualEntry && onManualEntry();
               }}
             >
               Manually Enter A Recipient
@@ -77,33 +72,40 @@ export default function TransferBottomSlider({ open, onClose }) {
           </Box>
 
           {/* Airplane + text */}
-          <Box textAlign="center" mt={8}>
-            <SendOutlinedIcon sx={{ fontSize: 45, opacity: 0.5 }} />
-            <Typography mt={4} color="text.secondary" fontSize={15} fontWeight={600}>
+          <Box textAlign="center" mt={6} mb={0}>
+            <Box
+              sx={{
+                width: 70,
+                height: 70,
+                borderRadius: "50%",
+                backgroundColor: "#fafafa",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transform: "rotate(-40deg)",
+                ml: 18
+              }}
+            >
+              <SendRoundedIcon sx={{ fontSize: 35, opacity: 0.8 }} />
+            </Box>
+
+            <Typography mt={2} color="text.secondary" fontSize={15} fontWeight={600}>
               Transfer Tickets Via Email or Text Message
             </Typography>
-            <Typography mt={0.3} mb={8} color="text.secondary" fontSize={14}>
+            <Typography mt={0.3} mb={10} color="text.secondary" fontSize={14}>
               Select an Email or mobile number to transfer tickets to your recipient.
             </Typography>
           </Box>
 
           {/* Back Button */}
-          <Box mt={4} mb={2} textAlign="left">
-            <Button onClick={onClose} sx={{ textTransform: "none" }}>
+          <Box mt={4} mb={2} textAlign="left" bgcolor="#fafafa">
+            <Button onClick={() => { onBack && onBack(); }} sx={{ textTransform: "none" }}>
               <ChevronLeftIcon />
               BACK
             </Button>
           </Box>
         </Box>
       </Slide>
-
-      {/* SLIDE-UP FORM (SECOND BOTTOM SHEET) */}
-      <SlideUpForm open={formOpen} onClose={() => setFormOpen(false)}>
-        <TransferForm 
-            onClose={() => setFormOpen(false)} 
-            openTransferTo={onClose}   // <-- 🔥 THIS FIXES YOUR ISSUE
-        />
-      </SlideUpForm>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardMedia, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
+import ConfirmationNumberSharpIcon from '@mui/icons-material/ConfirmationNumberSharp';
 import { useEvent } from "../context/EventContext";
 
 const ImgCard = () => {
@@ -80,7 +80,10 @@ const ImgCard = () => {
             fontSize: "0.75rem",
           }}
         >
-          <ConfirmationNumberIcon fontSize="small" />
+          <ConfirmationNumberSharpIcon
+              fontSize="small"
+              sx={{ transform: "rotate(-45deg) scaleY(0.7)" }}
+            />
           <Typography>
             {events.tix} {events.tix > 1 ? "tickets" : "ticket"}
           </Typography>
