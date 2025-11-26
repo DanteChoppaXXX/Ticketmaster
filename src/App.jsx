@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -18,7 +18,16 @@ import Login from "./pages/Login";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 
+import SplashVideo from "./components/SplashScreen"; // your splash video component
+
 const App = () => {
+  const [showSplash, setShowSplash] = useState(true);
+
+  // Render Splash first, then the app
+  if (showSplash) {
+    return <SplashVideo onFinish={() => setShowSplash(false)} />;
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
