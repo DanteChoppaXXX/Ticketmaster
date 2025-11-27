@@ -47,12 +47,13 @@ const BottomNavBar = () => {
           onChange={(e, newValue) => setValue(newValue)}
           showLabels
           sx={{
-            height: 60,
+            height: 70,
 
             // REMOVE label zoom animation
             "& .MuiBottomNavigationAction-label": {
-              fontSize: 8,
+              fontSize: 9,
               pt: 0.5,
+              pb: 1.5,
               transition: "none !important",
             },
 
@@ -70,7 +71,7 @@ const BottomNavBar = () => {
         <BottomNavigationAction
           label="Discover"
           value="discover"
-          icon={<img src={value === "discover" ? activeDiscoverIcon : discoverIcon} style={{ width: 18 }} />}
+          icon={<img src={value === "discover" ? activeDiscoverIcon : discoverIcon} style={{ width: 24 }} />}
           component={Link}
           to="/home"
           sx={{ "& .MuiBottomNavigationAction-label": { fontSize: 8 } }}
@@ -79,7 +80,7 @@ const BottomNavBar = () => {
         <BottomNavigationAction
           label="For You"
           value="for-you"
-          icon={<img src={value === "for-you" ? activeForYouIcon : forYouIcon} style={{ width: 18 }} />}
+          icon={<img src={value === "for-you" ? activeForYouIcon : forYouIcon} style={{ width: 24 }} />}
           component={Link}
           to="/foryou"
           sx={{ "& .MuiBottomNavigationAction-label": { fontSize: 8 } }}
@@ -88,7 +89,7 @@ const BottomNavBar = () => {
         <BottomNavigationAction
           label="My Events"
           value="my-events"
-          icon={<img src={value === "my-events" ? activeMyEventIcon : myEventIcon} style={{ width: 18 }} />}
+          icon={<img src={value === "my-events" ? activeMyEventIcon : myEventIcon} style={{ width: 24 }} />}
           component={Link}
           to="/myevents"
           sx={{ "& .MuiBottomNavigationAction-label": { fontSize: 8 } }}
@@ -97,7 +98,7 @@ const BottomNavBar = () => {
         <BottomNavigationAction
           label="Sell"
           value="sell"
-          icon={<img src={value === "sell" ? activeSellIcon : sellIcon} style={{ width: 18 }} />}
+          icon={<img src={value === "sell" ? activeSellIcon : sellIcon} style={{ width: 24 }} />}
           component={Link}
           to="/sell"
           sx={{ "& .MuiBottomNavigationAction-label": { fontSize: 8 } }}
@@ -106,7 +107,7 @@ const BottomNavBar = () => {
         <BottomNavigationAction
           label="My Account"
           value="account"
-          icon={<img src={value === "account" ? activeAccountIcon : accountIcon} style={{ width: 18 }} />}
+          icon={<img src={value === "account" ? activeAccountIcon : accountIcon} style={{ width: 24 }} />}
           component={Link}
           to="/myaccount"
           sx={{ "& .MuiBottomNavigationAction-label": { fontSize: 8 } }}
