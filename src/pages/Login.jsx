@@ -53,7 +53,7 @@ export default function Login() {
   };
 
   // Show full-screen spinner
-  if (loading) return <LoadingScreen />;
+  // if (loading) return <LoadingScreen />;
 
   return (
     <Box

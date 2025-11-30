@@ -13,7 +13,7 @@ export default function LoadingScreen() {
         backgroundColor: "#f4f6f8",
       }}
     >
-      <CircularProgress size={60} />
+      <CircularProgress size={10} />
     </Box>
   );
 }
