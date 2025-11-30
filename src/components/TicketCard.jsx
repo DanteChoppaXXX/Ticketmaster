@@ -190,7 +190,7 @@ export default function TicketCard({ event, seatInfo }) {
         }}
       >
 
-        <Typography sx={{ color: "#026cdf", fontWeight: 700, fontSize: 13 }}>
+        <Typography sx={{ color: "#026cdf", fontWeight: 700, fontSize: 14 }}>
           Ticket Details
         </Typography>
       </Box>

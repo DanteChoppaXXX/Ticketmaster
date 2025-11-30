@@ -88,11 +88,11 @@ export default function MyTickets() {
       </AppBar>
 
       {/* BODY */}
-      <Box sx={{ pt: 0.5, ml: 1 }}>
+      <Box sx={{ pt: 0.5, ml: 0 }}>
         <SwipeTickets />
 
         {/* TRANSFER + SELL BUTTONS */}
-        <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
+        <Box sx={{ display: "flex", gap: 2, mt: 1, ml: 1 }}>
           <Button
             variant="contained"
             onClick={handleDrawerOpen}
