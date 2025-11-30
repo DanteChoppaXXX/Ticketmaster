@@ -13,6 +13,7 @@ const defaultEvent = {
   image: Tswift,
   tix: 2,
   date: "Thu, Nov 21, 7pm • Rogers Center",
+  venue: "Rogers Center",
   seating: "METLIFE GATE",
   seatMap: [
     { sec: "A3", row: "10", seat: "5" },

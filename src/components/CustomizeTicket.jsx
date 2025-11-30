@@ -156,6 +156,7 @@ export default function CustomizeTicket() {
           <TextField fullWidth placeholder="Ticket Title" name="title" value={formData.title} onChange={handleChange} sx={{ mb: 2 }} />
           <TextField fullWidth placeholder="Date & Venue" name="date" value={formData.date} onChange={handleChange} sx={{ mb: 2 }} />
           <TextField fullWidth placeholder="Seating" name="seating" value={formData.seating} onChange={handleChange} sx={{ mb: 2 }} />
+          <TextField fullWidth placeholder="Map Venue" name="venue" value={formData.venue} onChange={handleChange} sx={{ mb: 2 }} />
           <TextField fullWidth placeholder="Ticket Count" type="number" name="tix" value={formData.tix} onChange={handleChange} sx={{ mb: 2 }} />
 
           <Divider sx={{ my: 3 }} />

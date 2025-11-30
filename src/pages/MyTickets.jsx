@@ -7,6 +7,8 @@ import {
   Box,
   Link,
   IconButton,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import Close from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
@@ -16,14 +18,17 @@ import TicketTransferFlow from "../components/TicketTransferFlow";
 
 export default function MyTickets() {
   const navigate = useNavigate();
-  const { events } = useEvent();
+  const { events, selectedEvent } = useEvent(); // use selectedEvent if available
+  const event = selectedEvent || (Array.isArray(events) ? events[0] : events); // fallback to first event
+
   const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState(0);
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
 
+  const ticketCount = events?.tickets?.length || 0;
 
-  // Redirect if no event exists
   useEffect(() => {
     if (!events || (Array.isArray(events) && events.length === 0)) {
       navigate("/myevents");
@@ -39,7 +44,6 @@ export default function MyTickets() {
         sx={{ background: "#1f262d", top: 0, width: "100%" }}
       >
         <Toolbar sx={{ position: "relative" }}>
-          {/* CLOSE BUTTON */}
           <Box sx={{ mr: "auto", pt: 2 }}>
             <IconButton
               edge="start"
@@ -51,7 +55,6 @@ export default function MyTickets() {
             </IconButton>
           </Box>
 
-          {/* TITLE */}
           <Box
             sx={{
               position: "absolute",
@@ -74,10 +77,8 @@ export default function MyTickets() {
             </Typography>
           </Box>
 
-          {/* HELP */}
           <Box sx={{ ml: "auto", pt: 2 }}>
             <Link
-              href="#"
               underline="none"
               sx={{ color: "#ffffff", fontWeight: 600, fontSize: 14 }}
             >
@@ -87,49 +88,139 @@ export default function MyTickets() {
         </Toolbar>
       </AppBar>
 
-      {/* BODY */}
-      <Box sx={{ pt: 0.5, ml: 0 }}>
-        <SwipeTickets />
+      {/* TABS */}
+      <Tabs
+          value={tab}
+          onChange={(e, newValue) => setTab(newValue)}
+          variant="fullWidth"
+          sx={{
+            background: "#024ddf",
+            color: "#ffffff",
 
-        {/* TRANSFER + SELL BUTTONS */}
-        <Box sx={{ display: "flex", gap: 2, mt: 1, ml: 1 }}>
-          <Button
-            variant="contained"
-            onClick={handleDrawerOpen}
-            sx={{
-              flex: 1,
-              background: "#026AE1",
+            // inactive tab text
+            "& .MuiTab-root": {
+              color: "#d0d0d0",
               textTransform: "none",
-              fontWeight: 600,
-              color: "#fff",
-              "&:hover": { background: "#025ac0" },
-              ml: 1,
-            }}
-          >
-            Transfer
-          </Button>
+              fontWeight: 500,
+            },
 
-          <Button
-            variant="contained"
-            sx={{
-              flex: 1,
-              background: "#dddddd",
-              textTransform: "none",
+            // active tab text
+            "& .Mui-selected": {
+              color: "#ffffff !important",
               fontWeight: 600,
-              color: "#ffffff",
-              "&:hover": { background: "#cccccc" },
-              mr: 2,
-            }}
-          >
-            Sell
-          </Button>
-        </Box>
+            },
+
+            // indicator bar color
+            "& .MuiTabs-indicator": {
+              backgroundColor: "#ffffff",
+            },
+          }}
+        >
+          <Tab label={`MY TICKETS (${ticketCount})`} />
+          <Tab label="ADD ONS" />
+        </Tabs>
+
+      {/* TAB CONTENT */}
+      <Box sx={{ pt: 1 }}>
+        {tab === 0 && (
+          <>
+            <SwipeTickets />
+
+            {/* TRANSFER + SELL BUTTONS */}
+            <Box sx={{ display: "flex", gap: 2, mt: 1, ml: 1 }}>
+              <Button
+                variant="contained"
+                onClick={handleDrawerOpen}
+                sx={{
+                  flex: 1,
+                  background: "#026AE1",
+                  textTransform: "none",
+                  fontWeight: 600,
+                  color: "#fff",
+                  "&:hover": { background: "#025ac0" },
+                  ml: 1,
+                }}
+              >
+                Transfer
+              </Button>
+
+              <Button
+                variant="contained"
+                sx={{
+                  flex: 1,
+                  background: "#dddddd",
+                  textTransform: "none",
+                  fontWeight: 600,
+                  color: "#ffffff",
+                  "&:hover": { background: "#cccccc" },
+                  mr: 2,
+                }}
+              >
+                Sell
+              </Button>
+            </Box>
+           {/* MAP SECTION */}
+<Box
+  sx={{
+    mt: 3,
+    width: "100%",
+    height: 180,
+    borderRadius: 6,
+    overflow: "hidden",
+    position: "relative",
+    mb: 1,
+  }}
+>
+  {/* Map iframe */}
+  <iframe
+    width="100%"
+    height="100%"
+    loading="lazy"
+    style={{ border: 0 }}
+    src={`https://www.google.com/maps?q=${encodeURIComponent(
+      event?.venue || ""
+    )}&output=embed`}
+  ></iframe>
+
+  {/* Venue overlay */}
+  <Box
+    sx={{
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      bgcolor: "rgba(0, 0, 0, 0.0)", // keep transparent
+      color: "#fff",
+      px: 4,
+      py: 0,
+      display: "flex",
+      alignItems: "center",
+      borderBottomLeftRadius: 6,
+      borderBottomRightRadius: 6,
+    }}
+  >
+    <Typography
+      variant="subtitle1"
+      sx={{ color: "#505050", fontSize: 24, fontWeight: 500 }}
+    >
+      {event?.venue || ""}
+    </Typography>
+  </Box>
+</Box>
+
+          </>
+        )}
+
+        {tab === 1 && (
+          <Box sx={{ p: 3, textAlign: "center", color: "#777" }}>
+            <Typography sx={{ fontSize: 14 }}>
+              No Add-ons available.
+            </Typography>
+          </Box>
+        )}
       </Box>
 
-      <TicketTransferFlow
-        open={open}
-        onClose={() => setOpen(false)}
-      />  
+      <TicketTransferFlow open={open} onClose={() => setOpen(false)} />
     </Box>
   );
 }
