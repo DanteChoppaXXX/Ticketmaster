@@ -102,7 +102,7 @@ export default function SwipeTickets() {
         sx={{
           display: "flex",
           gap: 2,
-          px: 2,
+          px: 2.5,
           overflowX: "auto",
           scrollSnapType: "x mandatory",
           WebkitOverflowScrolling: "touch", // iOS momentum

@@ -36,7 +36,7 @@ export default function MyTickets() {
   }, [events]);
 
   return (
-    <Box sx={{ minHeight: "100vh", background: "#f5f5f5" }}>
+    <Box sx={{ minHeight: "100vh", background: "#f5f5f5", display: "flex", flexDirection: "column", overflow: "hidden", }}>
       {/* TOP BAR */}
       <AppBar
         position="sticky"
@@ -121,7 +121,7 @@ export default function MyTickets() {
         </Tabs>
 
       {/* TAB CONTENT */}
-      <Box sx={{ pt: 1 }}>
+      <Box sx={{ pt: 0.2 }}>
         {tab === 0 && (
           <>
             <SwipeTickets />
@@ -164,7 +164,7 @@ export default function MyTickets() {
               sx={{
                 mt: 3,
                 width: "100%",
-                height: 180,
+                height: 120,
                 borderRadius: 6,
                 overflow: "hidden",
                 position: "relative",
