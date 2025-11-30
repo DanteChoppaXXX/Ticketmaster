@@ -6,10 +6,20 @@ import {
   Typography,
   Paper,
 } from "@mui/material";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth"; // ✅ import signOut
 import { auth, db } from "../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import LoadingScreen from "../components/LoadingScreen";
+import { v4 as uuid } from "uuid";
+
+// 🔥 Create/get a permanent device ID
+const getDeviceId = () => {
+  let id = localStorage.getItem("deviceId");
+  if (!id) {
+    id = uuid();
+    localStorage.setItem("deviceId", id);
+  }
+  return id;
+};
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -17,7 +27,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // 🔥 create Firestore user if missing
+  // 🔥 Ensure Firestore user profile exists
   const ensureUserDocument = async (user) => {
     const userRef = doc(db, "users", user.uid);
     const snapshot = await getDoc(userRef);
@@ -29,8 +39,30 @@ export default function Login() {
         username: user.email.split("@")[0],
         createdAt: new Date(),
       });
-      console.log("User document created in Firestore");
     }
+  };
+
+  // 🔥 Strict one-device login
+  const validateDeviceLock = async (uid) => {
+    const deviceId = getDeviceId();
+    const sessionRef = doc(db, "sessions", uid);
+    const snap = await getDoc(sessionRef);
+
+    if (snap.exists()) {
+      const data = snap.data();
+
+      if (!data.registeredDeviceId || data.registeredDeviceId !== deviceId) {
+        throw new Error("Contact Admin to get account for this device.");
+      }
+
+      return; // device matches
+    }
+
+    // First login → lock this device
+    await setDoc(sessionRef, {
+      registeredDeviceId: deviceId,
+      createdAt: Date.now(),
+    });
   };
 
   const handleLogin = async (e) => {
@@ -42,18 +74,32 @@ export default function Login() {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // 🔥 ensure Firestore profile exists
       await ensureUserDocument(user);
 
-      // Redirect handled by PublicRoute
+      // 🔥 validate device BEFORE redirect
+      await validateDeviceLock(user.uid);
+
+      setLoading(false);
+      // redirect handled by your router
     } catch (err) {
-      setError("Invalid email or password.");
+      console.error(err);
+
+      // 🔥 Force logout if validation failed
+      try {
+        await signOut(auth);
+      } catch (signOutErr) {
+        console.error("Error signing out:", signOutErr);
+      }
+
+      if (err.message.includes("Contact Admin")) {
+        setError("Contact Admin to get account for this device.");
+      } else {
+        setError("Invalid email or password.");
+      }
+
       setLoading(false);
     }
   };
-
-  // Show full-screen spinner
-  // if (loading) return <LoadingScreen />;
 
   return (
     <Box
@@ -153,11 +199,11 @@ export default function Login() {
 
         <Typography
           variant="body2"
-          color="#8a8a8a"
+          color="#ff0000"
           textAlign="center"
           sx={{ mt: 4 }}
         >
-          Don’t have an account? Contact Support
+          Don’t have an account or getting kicked out? Contact Admin to get your own account
         </Typography>
       </Paper>
     </Box>
