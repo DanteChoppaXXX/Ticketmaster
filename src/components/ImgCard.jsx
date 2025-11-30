@@ -26,7 +26,7 @@ const ImgCard = ({ event }) => {
       sx={{
         position: "relative",
         width: "100%",
-        borderRadius: 1,
+        borderRadius: 0,
         overflow: "hidden",
         cursor: "pointer",
         minHeight: 220,
@@ -54,50 +54,51 @@ const ImgCard = ({ event }) => {
           position: "absolute",
           inset: 0,
           background:
-            "linear-gradient(6deg, rgba(0,0,0,0.85) 48%, rgba(22,22,23,0.5) 100%)",
+            "linear-gradient(6deg, rgba(0,0,0,0.85) 20%, rgba(22,22,23,0.5) 100%)",
         }}
       />
 
       {/* TEXT OVERLAY */}
       <Box
-        sx={{
-          position: "absolute",
-          bottom: 16,
-          left: 16,
-          color: "#fff",
-        }}
-      >
-        {/* EVENT NAME */}
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: 600, mb: 0.5 }}
-        >
-          {event.name}
-        </Typography>
+  sx={{
+    position: "absolute",
+    bottom: 12,
+    left: 16,
+    color: "#fff",
+    lineHeight: 0.5, // tighter line spacing
+  }}
+>
+  {/* EVENT NAME */}
+  <Typography
+    variant="h6"
+    sx={{ fontWeight: 500, mb: 0 }} // reduce margin bottom
+  >
+    {event.name}
+  </Typography>
 
-        {/* EVENT DATE */}
-        <Typography variant="subtitle1" sx={{ fontSize: "0.875rem", mb: 1 }}>
-          {event.date}
-        </Typography>
+  {/* EVENT DATE */}
+  <Typography variant="subtitle1" sx={{ fontSize: "0.875rem", mt: 0.2, mb: 0 }}>
+    {event.date}
+  </Typography>
 
-        {/* TICKET COUNT */}
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 0.5,
-            fontSize: "0.75rem",
-          }}
-        >
-          <ConfirmationNumberSharpIcon
-            fontSize="small"
-            sx={{ transform: "rotate(-45deg) scaleY(0.7)" }}
-          />
-          <Typography>
-            {event.tix} {event.tix > 1 ? "tickets" : "ticket"}
-          </Typography>
-        </Box>
-      </Box>
+  {/* TICKET COUNT */}
+  <Box
+    sx={{
+      display: "flex",
+      alignItems: "center",
+      gap: 0.25, // smaller gap between icon and text
+      fontSize: "0.75rem",
+    }}
+  >
+    <ConfirmationNumberSharpIcon
+      fontSize="small"
+      sx={{ transform: "rotate(-45deg) scaleY(0.6) scaleX(0.85)" }}
+    />
+    <Typography sx={{ lineHeight: 1 }}>
+      {event.tix} {event.tix > 1 ? "tickets" : "ticket"}
+    </Typography>
+  </Box>
+</Box>
     </Card>
   );
 };

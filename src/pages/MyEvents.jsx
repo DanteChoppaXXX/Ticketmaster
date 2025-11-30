@@ -18,6 +18,8 @@ const MyEvents = () => {
   const { loading, selectedEvent, events } = useEvent();
   const [tabValue, setTabValue] = useState(0);
 
+  const numberOfEvents = Array.isArray(events) ? events.length : 0; // safely get count;
+
   const handleTabChange = (e, newValue) => {
     setTabValue(newValue);
   };
@@ -29,8 +31,7 @@ const MyEvents = () => {
         position="sticky"
         elevation={1}
         sx={{
-          background: "#1f262d",
-          top: 0,
+          background: "#1f262d", top: 0,
           width: "100%",
         }}
       >
@@ -81,28 +82,39 @@ const MyEvents = () => {
             </Link>
           </Box>
         </Toolbar>
-
+      </AppBar>
+      
         {/* TABS */}
         <Tabs
           value={tabValue}
           onChange={handleTabChange}
-          centered
-          textColor="inherit"
-          TabIndicatorProps={{ style: { backgroundColor: "#fff" } }}
+          variant="fullWidth"
           sx={{
-              "& .MuiTab-root": {
-                textTransform: "none",
-              },
-            background: "#1f262d",
-            color: "#fff",
-            mt: 0.5,
-            mr: 14,
+            background: "#024ddf",
+            color: "#ffffff",
+
+            // inactive tab text
+            "& .MuiTab-root": {
+              color: "#d0d0d0",
+              textTransform: "none",
+              fontWeight: 500,
+            },
+
+            // active tab text
+            "& .Mui-selected": {
+              color: "#ffffff !important",
+              fontWeight: 600,
+            },
+
+            // indicator bar color
+            "& .MuiTabs-indicator": {
+              backgroundColor: "#ffffff",
+            },
           }}
         >
-          <Tab label="Upcoming Events" />
-          <Tab label="Past Events" />
+          <Tab label={`UPCOMING (${numberOfEvents})`} />
+          <Tab label="PAST(0)" />
         </Tabs>
-      </AppBar>
 
       {/* BODY CONTENT */}
       <Box sx={{ p: 0.7 }}>
@@ -120,7 +132,7 @@ const MyEvents = () => {
           <>
             {/* -------- UPCOMING EVENTS TAB -------- */}
             {tabValue === 0 && (
-              <Box sx={{ width: "100%", mt: 1 }}>
+              <Box sx={{ width: "100%", mt: 0.2 }}>
                 <ImgCard event={selectedEvent} />
               </Box>
             )}
@@ -136,7 +148,7 @@ const MyEvents = () => {
                     fontSize: 14,
                   }}
                 >
-                  No past events yet.
+                  You don't have any past events.
                 </Typography>
               </Box>
             )}

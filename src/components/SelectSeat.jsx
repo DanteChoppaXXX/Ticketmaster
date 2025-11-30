@@ -78,32 +78,34 @@ export default function SelectSeat({ open, onClose, onContinue }) {
 
           {/* Sec / Row Summary */}
           <Box
-            sx={{
-              px: 2.5,
-              mt: 2,
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center"
-            }}
-          >
-            <Typography fontWeight={500} sx={{ opacity: 0.8 }}>
-              Sec {sec}, Row {row}
-            </Typography>
-
-            <ConfirmationNumberSharpIcon
-              fontSize="small"
               sx={{
-                mt: 0.2,
-                ml: 14,
-                transform: "rotate(-45deg) scaleY(0.7)",
-                opacity: 0.7
+                px: 2.5,
+                mt: 2,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "nowrap", // prevent wrapping
               }}
-            />
+            >
+              {/* Section & Row */}
+              <Typography fontWeight={500} sx={{ opacity: 0.8, whiteSpace: "nowrap" }}>
+                Sec {sec}, Row {row}
+              </Typography>
 
-            <Typography sx={{ opacity: 0.6 }}>
-              {seatMap.length} ticket{seatMap.length > 1 ? "s" : ""}
-            </Typography>
-          </Box>
+              {/* Ticket Icon + Count */}
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, whiteSpace: "nowrap" }}>
+                <ConfirmationNumberSharpIcon
+                  fontSize="small"
+                  sx={{
+                    transform: "rotate(-45deg) scaleY(0.7) scaleX(0.9)",
+                    opacity: 0.7,
+                  }}
+                />
+                <Typography sx={{ opacity: 0.6 }}>
+                  {seatMap.length} ticket{seatMap.length > 1 ? "s" : ""}
+                </Typography>
+              </Box>
+            </Box>
 
           {/* Seat Chips */}
           <Box

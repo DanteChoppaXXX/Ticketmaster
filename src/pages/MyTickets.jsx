@@ -27,7 +27,7 @@ export default function MyTickets() {
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
 
-  const ticketCount = events?.tickets?.length || 0;
+  const ticketCount = event?.tix|| 0;
 
   useEffect(() => {
     if (!events || (Array.isArray(events) && events.length === 0)) {
@@ -117,7 +117,7 @@ export default function MyTickets() {
           }}
         >
           <Tab label={`MY TICKETS (${ticketCount})`} />
-          <Tab label="ADD ONS" />
+          <Tab label="ADD-ONS" />
         </Tabs>
 
       {/* TAB CONTENT */}
@@ -160,53 +160,53 @@ export default function MyTickets() {
               </Button>
             </Box>
            {/* MAP SECTION */}
-<Box
-  sx={{
-    mt: 3,
-    width: "100%",
-    height: 180,
-    borderRadius: 6,
-    overflow: "hidden",
-    position: "relative",
-    mb: 1,
-  }}
->
-  {/* Map iframe */}
-  <iframe
-    width="100%"
-    height="100%"
-    loading="lazy"
-    style={{ border: 0 }}
-    src={`https://www.google.com/maps?q=${encodeURIComponent(
-      event?.venue || ""
-    )}&output=embed`}
-  ></iframe>
+            <Box
+              sx={{
+                mt: 3,
+                width: "100%",
+                height: 180,
+                borderRadius: 6,
+                overflow: "hidden",
+                position: "relative",
+                mb: 1,
+              }}
+            >
+              {/* Map iframe */}
+              <iframe
+                width="100%"
+                height="100%"
+                loading="lazy"
+                style={{ border: 0 }}
+                src={`https://www.google.com/maps?q=${encodeURIComponent(
+                  event?.venue || ""
+                )}&output=embed`}
+              ></iframe>
 
-  {/* Venue overlay */}
-  <Box
-    sx={{
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      bgcolor: "rgba(0, 0, 0, 0.0)", // keep transparent
-      color: "#fff",
-      px: 4,
-      py: 0,
-      display: "flex",
-      alignItems: "center",
-      borderBottomLeftRadius: 6,
-      borderBottomRightRadius: 6,
-    }}
-  >
-    <Typography
-      variant="subtitle1"
-      sx={{ color: "#505050", fontSize: 24, fontWeight: 500 }}
-    >
-      {event?.venue || ""}
-    </Typography>
-  </Box>
-</Box>
+              {/* Venue overlay */}
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  bgcolor: "rgba(0, 0, 0, 0.0)", // keep transparent
+                  color: "#fff",
+                  px: 4,
+                  py: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  borderBottomLeftRadius: 6,
+                  borderBottomRightRadius: 6,
+                }}
+              >
+                <Typography
+                  variant="subtitle1"
+                  sx={{ color: "#505050", fontSize: 24, fontWeight: 500 }}
+                >
+                  {event?.venue || ""}
+                </Typography>
+              </Box>
+            </Box>
 
           </>
         )}
