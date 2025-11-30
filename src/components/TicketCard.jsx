@@ -2,7 +2,8 @@ import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { useEvent } from "../context/EventContext";
 
-import walletIcon from "../icons/icon_wallet.svg";
+import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
+import barcodeIcon from "../icons/barcode-scan-icon.png";
 import verified from "../assets/ver.png";
 
 export default function TicketCard({ event, seatInfo }) {
@@ -28,25 +29,37 @@ export default function TicketCard({ event, seatInfo }) {
       }}
     >
       {/* Top Blue Bar */}
-      <Box
-        sx={{
-          height: 30,
-          background: "#0064ca",
-          borderTopLeftRadius: 8,
-          borderTopRightRadius: 8,
-          color: "#ffffff",
-          textAlign: "center",
-        }}
-      >
-        <Typography sx={{ pt: 0.5, fontSize: 13, fontWeight: 500 }}>
-          {ticket.title}
-        </Typography>
-      </Box>
+        <Box
+          sx={{
+            height: 30,
+            background: "#024ddf",
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8,
+            color: "#ffffff",
+            display: "flex",
+            alignItems: "center",
+            px: 1,
+            position: "relative",
+          }}
+        >
+          {/* Left spacer */}
+          <Box sx={{ flex: 1 }} />
+
+          {/* Center title */}
+          <Typography sx={{ fontSize: 13, fontWeight: 500, textAlign: "center" }}>
+            {ticket.title}
+          </Typography>
+
+          {/* Right icon */}
+          <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+            <InfoOutlineIcon sx={{opacity: 0.7}}/>
+          </Box>
+        </Box>
 
       {/* SEC/ROW/SEAT */}
       <Box
         sx={{
-          background: "#0071e3",
+          background: "#024ddf",
           color: "white",
           p: 2,
           textAlign: "center",
@@ -61,21 +74,21 @@ export default function TicketCard({ event, seatInfo }) {
           }}
         >
           <Box sx={{ textAlign: "center" }}>
-            <Typography sx={{ opacity: 0.7, fontSize: 12 }}>SEC</Typography>
+            <Typography sx={{ opacity: 0.7, fontSize: 13 }}>SEC</Typography>
             <Typography sx={{ fontWeight: 700, fontSize: 22 }}>
               {seat.sec}
             </Typography>
           </Box>
 
           <Box sx={{ textAlign: "center" }}>
-            <Typography sx={{ opacity: 0.7, fontSize: 12 }}>ROW</Typography>
+            <Typography sx={{ opacity: 0.7, fontSize: 13 }}>ROW</Typography>
             <Typography sx={{ fontWeight: 700, fontSize: 22 }}>
               {seat.row}
             </Typography>
           </Box>
 
           <Box sx={{ textAlign: "center" }}>
-            <Typography sx={{ opacity: 0.7, fontSize: 12 }}>SEAT</Typography>
+            <Typography sx={{ opacity: 0.7, fontSize: 13 }}>SEAT</Typography>
             <Typography sx={{ fontWeight: 700, fontSize: 22 }}>
               {seat.seat}
             </Typography>
@@ -131,7 +144,7 @@ export default function TicketCard({ event, seatInfo }) {
       <Typography
         sx={{
           textAlign: "center",
-          mt: 4,
+          mt: 6.5,
           fontWeight: 500,
           fontSize: 15,
         }}
@@ -140,15 +153,15 @@ export default function TicketCard({ event, seatInfo }) {
       </Typography>
 
       {/* Add to Apple Wallet */}
-      <Box sx={{ p: 2, mt: 2, textAlign: "center" }}>
+      <Box sx={{ p: 2, mt: 0, textAlign: "center" }}>
         <Button
           variant="contained"
           sx={{
-            background: "#1a1a1a",
-            width: "70%",
-            borderRadius: 2,
+            background: "#024ddf",
+            width: "95%",
+            borderRadius: 0,
             textTransform: "none",
-            fontWeight: 500,
+            fontWeight: 600,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -159,11 +172,11 @@ export default function TicketCard({ event, seatInfo }) {
           }}
         >
           <img
-            src={walletIcon}
+            src={barcodeIcon}
             alt="Apple Wallet"
-            style={{ width: 22, height: 22 }}
+            style={{ filter: "invert(1)", width: 22, height: 22 }}
           />
-          Add to Apple Wallet
+          View Ticket
         </Button>
       </Box>
 
@@ -172,15 +185,12 @@ export default function TicketCard({ event, seatInfo }) {
         sx={{
           display: "flex",
           justifyContent: "space-around",
-          pb: 4,
-          mt: 2,
+          pb: 8,
+          mt: 0,
         }}
       >
-        <Typography sx={{ color: "#0071e3", fontWeight: 700, fontSize: 13 }}>
-          View Barcode
-        </Typography>
 
-        <Typography sx={{ color: "#0071e3", fontWeight: 700, fontSize: 13 }}>
+        <Typography sx={{ color: "#026cdf", fontWeight: 700, fontSize: 13 }}>
           Ticket Details
         </Typography>
       </Box>
@@ -188,8 +198,8 @@ export default function TicketCard({ event, seatInfo }) {
       {/* Bottom Verified Badge */}
       <Box
         sx={{
-          height: 30,
-          background: "#0064ca",
+          height: 2,
+          background: "#024ddf",
           borderBottomLeftRadius: 8,
           borderBottomRightRadius: 8,
           display: "flex",
@@ -198,11 +208,13 @@ export default function TicketCard({ event, seatInfo }) {
           px: 1,
         }}
       >
+      {/*
         <img
           src={verified}
           alt="ticketmaster verified"
           style={{ height: 24 }}
-        />
+        /> 
+      */}
       </Box>
     </Box>
   );
