@@ -41,7 +41,7 @@ export default function MyTickets() {
       <AppBar
         position="sticky"
         elevation={1}
-        sx={{ background: "#1f262d", top: 0, width: "100%" }}
+        sx={{ background: "#000000", top: 0, width: "100%" }}
       >
         <Toolbar sx={{ position: "relative" }}>
           <Box sx={{ mr: "auto", pt: 2 }}>
@@ -94,7 +94,7 @@ export default function MyTickets() {
           onChange={(e, newValue) => setTab(newValue)}
           variant="fullWidth"
           sx={{
-            background: "#024ddf",
+            background: "#000000",
             color: "#ffffff",
 
             // inactive tab text

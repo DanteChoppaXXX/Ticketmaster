@@ -4,10 +4,13 @@ import {
   Typography,
   Slide,
   Divider,
-  Button
+  Button,
+  IconButton,
 } from "@mui/material";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import InfoIcon from "@mui/icons-material/Info";
+import CloseIcon from "@mui/icons-material/Close";
 import ConfirmationNumberSharpIcon from "@mui/icons-material/ConfirmationNumberSharp";
 import { useEvent } from "../context/EventContext";
 
@@ -72,9 +75,36 @@ export default function SelectSeat({ open, onClose, onContinue }) {
             <Typography fontWeight={500} fontSize={14}>
               SELECT TICKETS TO TRANSFER
             </Typography>
+          <IconButton
+            onClick={onClose}
+            size="small"
+            sx={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)" }}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
           </Box>
 
           <Divider />
+        {/* INFO BANNER */}
+        <Box
+          sx={{
+            mx: 2,
+            mt: 2,
+            p: 1.5,
+            border: "2.5px solid #a0a0a0",
+            borderRadius: "3px",
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 1,
+            bgcolor: "#fff",
+          }}
+        >
+          <InfoIcon sx={{ fontSize: "1.5rem", color: "#777", mt: "1px", flexShrink: 0 }} />
+          <Typography fontSize="0.89rem" color="#333" lineHeight={1.45}>
+            Only transfer tickets to people you know and trust to ensure everyone stays safe and
+            socially distanced
+          </Typography>
+        </Box>
 
           {/* Sec / Row Summary */}
           <Box
@@ -115,7 +145,7 @@ export default function SelectSeat({ open, onClose, onContinue }) {
               px: 2.5,
               mt: 2,
               flexWrap: "wrap",
-              pb: 14,
+              pb: 1,
             }}
           >
             {seatMap.map((seatObj, index) => {
@@ -133,7 +163,7 @@ export default function SelectSeat({ open, onClose, onContinue }) {
                   sx={{
                     width: 75,
                     height: 80,
-                    borderRadius: "12px",
+                    borderRadius: "2px 2px 8px 8px",
                     overflow: "hidden",
                     cursor: "pointer",
                     boxShadow: "0px 2px 6px rgba(0,0,0,0.15)",
@@ -184,7 +214,7 @@ export default function SelectSeat({ open, onClose, onContinue }) {
                           width: 22,
                           height: 22,
                           borderRadius: "50%",
-                          border: "2.5px solid #cfcfcf",
+                          border: "0.1px solid #cfffff",
                         }}
                       />
                     )}
