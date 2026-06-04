@@ -7,6 +7,8 @@ import {
   Card,
   CardContent,
   Snackbar,
+  Tab,
+  Tabs,
   Alert,
   IconButton,
   Divider,
@@ -21,6 +23,8 @@ import { useEvent } from "../context/EventContext";
 
 export default function CustomizeTicket() {
   const { events, updateEvent } = useEvent();
+
+  const [tabValue, setTabValue] = useState(0);
 
   const [formData, setFormData] = useState({
     ...events,
@@ -104,18 +108,56 @@ export default function CustomizeTicket() {
       console.log("Event updated!");
       setToastOpen(true);
     };
+
+    const handleTabChange = (e, newValue) => {
+    setTabValue(newValue);
+    };
+
         
   return (
     <Box
       sx={{
-        p: 3,
+        pb: 3,
         display: "flex",
-        gap: 3,
+        gap: 0,
         justifyContent: "center",
         flexDirection: { xs: "column", md: "row" },
       }}
     >
+       {/* TABS */}
+        <Tabs
+          value={tabValue}
+          onChange={handleTabChange}
+          variant="fullWidth"
+          sx={{
+            background: "#000000",
+            color: "#ffffff",
+
+            // inactive tab text
+            "& .MuiTab-root": {
+              color: "#d0d0d0",
+              textTransform: "none",
+              fontWeight: 500,
+            },
+
+            // active tab text
+            "& .Mui-selected": {
+              color: "#ffffff !important",
+              fontWeight: 600,
+            },
+
+            // indicator bar color
+            "& .MuiTabs-indicator": {
+              backgroundColor: "#ffffff",
+            },
+          }}
+        >
+          <Tab label={`Regular`} />
+          <Tab label="General Admission" />
+        </Tabs>
+
       {/* LEFT — EDITOR */}
+      {tabValue === 0 && (
       <Card
         sx={{
           width: "100%",
@@ -184,6 +226,76 @@ export default function CustomizeTicket() {
         </CardContent>
       </Card>
 
+    )}
+        {tabValue === 1 && (
+          <Card
+        sx={{
+          width: "100%",
+          maxWidth: 650,
+          p: 2,
+          borderRadius: 3,
+          boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
+        }}
+      >
+        <CardContent>
+          <Typography variant="h5" sx={{ fontWeight: "bold", mb: 3 }}>
+            General Admission
+          </Typography>
+
+          {/* IMAGE UPLOAD */}
+          <Box sx={{ textAlign: "center", mb: 3 }}>
+            <Avatar
+              variant="rounded"
+              src={previewImg}
+              sx={{
+                width: 180,
+                height: 180,
+                margin: "0 auto",
+                borderRadius: 2,
+                boxShadow: "0 3px 12px rgba(0,0,0,0.2)",
+              }}
+            />
+            <Button variant="outlined" component="label" sx={{ mt: 2 }}>
+              Upload Image
+              <input type="file" hidden accept="image/*" onChange={handleImageUpload} />
+            </Button>
+          </Box>
+
+          <Divider sx={{ my: 2 }} />
+
+          {/* MAIN FIELDS */}
+          <TextField fullWidth placeholder="Event Name" name="name" value={formData.name} onChange={handleChange} sx={{ mb: 2 }} />
+          <TextField fullWidth placeholder="Ticket Title" name="title" value={formData.title} onChange={handleChange} sx={{ mb: 2 }} />
+          <TextField fullWidth placeholder="Date & Venue" name="date" value={formData.date} onChange={handleChange} sx={{ mb: 2 }} />
+          <TextField fullWidth placeholder="Seating" name="seating" value={formData.seating} onChange={handleChange} sx={{ mb: 2 }} />
+          <TextField fullWidth placeholder="Map Venue" name="venue" value={formData.venue} onChange={handleChange} sx={{ mb: 2 }} />
+          <TextField fullWidth placeholder="Ticket Count" type="number" name="tix" value={formData.tix} onChange={handleChange} sx={{ mb: 2 }} />
+
+          <Divider sx={{ my: 3 }} />
+
+          {/* SEAT MANAGEMENT */}
+          <Typography sx={{ mb: 1, fontWeight: "bold" }}>Seat Map</Typography>
+
+          {(formData.seatMap || []).map((seat, index) => (
+            <Box key={index} sx={{ display: "flex", gap: 2, alignItems: "center", mb: 2 }}>
+              <TextField label="Section" value={seat.sec} onChange={(e) => handleSeatChange(index, "sec", e.target.value)} />
+              <TextField label="Row" value={seat.row} onChange={(e) => handleSeatChange(index, "row", e.target.value)} />
+              <TextField label="Seat" value={seat.seat} onChange={(e) => handleSeatChange(index, "seat", e.target.value)} />
+              <IconButton color="error" onClick={() => removeSeat(index)}><DeleteIcon /></IconButton>
+            </Box>
+          ))}
+
+          <Button variant="outlined" onClick={addSeat} sx={{ mt: 1 }}>
+            + Add Seat
+          </Button>
+
+          {/* SAVE BUTTON */}
+          <Button variant="contained" fullWidth sx={{ mt: 4, py: 1.2, fontWeight: "bold", borderRadius: 2 }} onClick={handleSave}>
+            Save Changes
+          </Button>
+        </CardContent>
+      </Card>
+        )}    
       {/* FULL TICKET PREVIEW — matches TicketCard UI */}
   <Box
     sx={{
@@ -372,7 +484,9 @@ export default function CustomizeTicket() {
         style={{ height: 24 }}
       />
     </Box>
+      
   </Box>
+
 
       {/* SUCCESS TOAST */}
       <Snackbar

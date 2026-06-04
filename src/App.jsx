@@ -19,6 +19,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 
 import SplashVideo from "./components/SplashScreen"; // your splash video component
+import EventTicketView from "./pages/EventTicketView.jsx";
 
 const App = () => {
   const [showSplash, setShowSplash] = useState(true);
@@ -59,6 +60,7 @@ const App = () => {
                 <Route path="foryou" element={<ForYou />} />
                 <Route path="myevents" element={<MyEvents />} />
                 <Route path="mytickets" element={<MyTickets />} />
+                <Route path="eventticket" element={<EventTicketView />} />
                 <Route path="myaccount" element={<MyAccount />} />
                 <Route path="sell" element={<Sell />} />
               </Route>

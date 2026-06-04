@@ -38,7 +38,7 @@ const MyEvents = () => {
         }}
       >
         <Toolbar sx={{ position: "relative" }}>
-          <Box sx={{ mr: "auto", pt: 2 }}>
+       {/* <Box sx={{ mr: "auto", pt: 2 }}>
             <IconButton
               edge="start"
               aria-label="close"
@@ -47,7 +47,7 @@ const MyEvents = () => {
             >
               <ArrowBackIosNewIcon fontSize="small" />
             </IconButton>
-          </Box>
+          </Box> */}
 
           {/* CENTER TITLE */}
           <Box

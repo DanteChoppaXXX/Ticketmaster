@@ -2,16 +2,12 @@ import React from "react";
 import { Card, CardMedia, Typography, Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ConfirmationNumberSharpIcon from "@mui/icons-material/ConfirmationNumberSharp";
+import barcodeIcon from "../icons/barcode-scan-icon.png";
 
 const ImgCard = ({ event }) => {
   const navigate = useNavigate();
 
   if (!event) return null;
-
-  const eventImage =
-    event.image && typeof event.image === "string"
-      ? event.image
-      : "https://via.placeholder.com/600x300?text=No+Image";
 
   const handleClick = () => navigate("/mytickets");
 
@@ -20,56 +16,34 @@ const ImgCard = ({ event }) => {
       onClick={handleClick}
       elevation={2}
       sx={{
-        width: "100%",
+        width: "100%",           // 👈 matches image-era width
         borderRadius: "0px 0px 0px 0px",
         overflow: "hidden",
         cursor: "pointer",
-        bgcolor: "#111",
+        bgcolor: "transparent",
         mb: 2,
+        mt: -6,
+        position: "relative",  // 👈 needed for zIndex to work
+        zIndex: 10,            // 👈 brings card in front of hero image
         transition: "transform 0.18s ease",
         "&:hover": { transform: "scale(1.01)" },
+        backgroundImage: "none",
+        boxShadow: "none",
       }}
     >
-      {/* IMAGE SECTION */}
-      <Box sx={{ position: "relative", width: "100%", aspectRatio: "16/8" }}>
-        <CardMedia
-          component="img"
-          image={eventImage}
-          alt={event.name}
-          loading="lazy"
+      {/* DATE SECTION */}
+      <Box sx={{ width: "60%", bgcolor: "#000000", px: 1.25, py: 0.5 }}>
+        <Typography
           sx={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "center top",
-            display: "block",
-          }}
-        />
-
-        {/* DATE BADGE — flush left, sitting on top of black section */}
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            bgcolor: "#000000",
-            borderTopRightRadius: "2px",
-            px: 1.25,
-            py: 0.5,
+            color: "#fff",
+            fontSize: "0.78rem",
+            fontWeight: 500,
+            letterSpacing: "0.01em",
+            lineHeight: 1.3,
           }}
         >
-          <Typography
-            sx={{
-              color: "#fff",
-              fontSize: "0.78rem",
-              fontWeight: 500,
-              letterSpacing: "0.01em",
-              lineHeight: 1.3,
-            }}
-          >
-            {event.date}
-          </Typography>
-        </Box>
+          {event.date}
+        </Typography>
       </Box>
 
       {/* BLACK INFO SECTION */}
@@ -91,14 +65,7 @@ const ImgCard = ({ event }) => {
         </Typography>
 
         {/* DIVIDER */}
-        <Box
-          sx={{
-            width: "40%",
-            height: "3px",
-            bgcolor: "rgba(255,255,255,0.25)",
-            mb: 1,
-          }}
-        />
+        <Box sx={{ width: "40%", height: "2px", bgcolor: "rgba(255,255,255,0.25)", mb: 1 }} />
 
         {/* VENUE ROW */}
         <Box
@@ -109,18 +76,11 @@ const ImgCard = ({ event }) => {
             mb: 1.25,
           }}
         >
-          <Typography
-            sx={{
-              color: "#fff",
-              fontSize: "0.82rem",
-              fontWeight: 400,
-            }}
-          >
+          <Typography sx={{ color: "#fff", fontSize: "0.82rem", fontWeight: 400 }}>
             {event.venue || ""}
           </Typography>
 
-          {/* TICKET COUNT */}
-         {/*<Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
             <ConfirmationNumberSharpIcon
               sx={{
                 color: "#fff",
@@ -131,11 +91,42 @@ const ImgCard = ({ event }) => {
             <Typography sx={{ color: "#fff", fontSize: "0.82rem", fontWeight: 500 }}>
               x{event.tix}
             </Typography>
-          </Box>*/}
+          </Box>
         </Box>
       </Box>
+
+      {/* BLUE VIEW TICKETS BUTTON */}
+      {/* Add to Apple Wallet */}
+      <Box sx={{ p: 0, mt: 0, textAlign: "center" }}>
+        <Button
+          variant="contained"
+          sx={{
+            background: "#024ddf",
+            width: "100%",
+            borderRadius: 0,
+            textTransform: "none",
+            fontWeight: 600,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 1,
+            py: 1,
+            ml: "auto",
+            mr: "auto",
+          }}
+        >
+          <img
+            src={barcodeIcon}
+            alt="Apple Wallet"
+            style={{ filter: "invert(1)", width: 22, height: 22 }}
+          />
+          View Ticket
+        </Button>
+      </Box>
+
     </Card>
   );
 };
 
 export default ImgCard;
+

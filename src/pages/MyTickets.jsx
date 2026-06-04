@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  AppBar,
-  Toolbar,
   Typography,
   Button,
   Box,
@@ -10,24 +8,24 @@ import {
   Tabs,
   Tab,
 } from "@mui/material";
-import Close from "@mui/icons-material/Close";
+import ArrowBack from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { useEvent } from "../context/EventContext";
-import SwipeTickets from "../components/SwipeTickets";
+import TixCard from "../components/TixCard";
+import TicketCard from "../components/TicketCard";
+import ListTickets from "../components/ListTickets";
+import OrderHeader from "../components/OrderHeader";
 import TicketTransferFlow from "../components/TicketTransferFlow";
 
 export default function MyTickets() {
   const navigate = useNavigate();
-  const { events, selectedEvent } = useEvent(); // use selectedEvent if available
-  const event = selectedEvent || (Array.isArray(events) ? events[0] : events); // fallback to first event
+  const { events, selectedEvent } = useEvent();
+  const event = selectedEvent || (Array.isArray(events) ? events[0] : events);
 
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState(0);
 
   const handleDrawerOpen = () => setOpen(true);
-  const handleDrawerClose = () => setOpen(false);
-
-  const ticketCount = event?.tix|| 0;
 
   useEffect(() => {
     if (!events || (Array.isArray(events) && events.length === 0)) {
@@ -36,192 +34,235 @@ export default function MyTickets() {
   }, [events]);
 
   return (
-    <Box sx={{ minHeight: "100vh", background: "#f5f5f5", display: "flex", flexDirection: "column", overflow: "hidden", }}>
-      {/* TOP BAR */}
-      <AppBar
-        position="sticky"
-        elevation={1}
-        sx={{ background: "#000000", top: 0, width: "100%" }}
-      >
-        <Toolbar sx={{ position: "relative" }}>
-          <Box sx={{ mr: "auto", pt: 2 }}>
-            <IconButton
-              edge="start"
-              aria-label="close"
-              onClick={() => navigate("/myevents")}
-              sx={{ color: "white" }}
-            >
-              <Close />
-            </IconButton>
-          </Box>
+    <Box sx={{ minHeight: "100vh", background: "#f5f5f5", display: "flex", flexDirection: "column", overflow: "hidden" }}>
 
-          <Box
-            sx={{
-              position: "absolute",
-              left: "50%",
-              transform: "translateX(-50%)",
-              pt: 1,
-            }}
-          >
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 600,
-                fontSize: 15,
-                color: "#ffffff",
-                textAlign: "center",
-                pt: 1,
-              }}
-            >
-              My Tickets
-            </Typography>
-          </Box>
+      {/* ── Hero Section ───────────────────────────────── */}
+      <Box sx={{ position: "relative", width: "100%", height: 260, overflow: "hidden", flexShrink: 0 }}>
 
-          <Box sx={{ ml: "auto", pt: 2 }}>
-            <Link
-              underline="none"
-              sx={{ color: "#ffffff", fontWeight: 600, fontSize: 14 }}
-            >
-              Help
-            </Link>
-          </Box>
-        </Toolbar>
-      </AppBar>
+        {/* Hero Image */}
+        <Box
+          component="img"
+          src={event?.image}
+          alt={event?.name}
+          sx={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "top center",
+            display: "block",
+          }}
+        />
 
-      {/* TABS */}
-      <Tabs
+        {/* Dark gradient overlay */}
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            background: "linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, transparent 40%, rgba(0,0,0,0.2) 100%)",
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Top-left close button */}
+        <IconButton
+          onClick={() => navigate("/myevents")}
+          aria-label="close"
+          sx={{
+            position: "absolute",
+            top: 14,
+            left: 14,
+            backgroundColor: "rgba(50,50,50,0.65)",
+            borderRadius: "16px",
+            padding: "6px",
+            color: "#fff",
+            backdropFilter: "blur(4px)",
+            "&:hover": { backgroundColor: "rgba(50,50,50,0.85)" },
+          }}
+        >
+          <ArrowBack fontSize="small" />
+        </IconButton>
+
+        {/* Top-right Help button */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: 14,
+            right: 14,
+            backgroundColor: "rgba(50,50,50,0.65)",
+            borderRadius: "16px",
+            backdropFilter: "blur(4px)",
+            px: 1.50,
+            py: 0.50,
+            cursor: "pointer",
+            "&:hover": { backgroundColor: "rgba(50,50,50,0.85)" },
+          }}
+        >
+          <Link underline="none" sx={{ color: "#fff", fontWeight: 600, fontSize: 14 }}>
+            Help
+          </Link>
+        </Box>
+      </Box>
+
+      {/* ── Content Area ───────────────────────────────── */}
+      <Box sx={{ flex: 1, display: "flex", flexDirection: "column", p: "20px" }}>
+
+        <TixCard event={selectedEvent} />
+
+        {/* Tabs */}
+        <Tabs
           value={tab}
           onChange={(e, newValue) => setTab(newValue)}
           variant="fullWidth"
           sx={{
-            background: "#000000",
-            color: "#ffffff",
-
-            // inactive tab text
+            background: "#ffffff",
             "& .MuiTab-root": {
-              color: "#d0d0d0",
+              color: "#808080",
               textTransform: "none",
               fontWeight: 500,
             },
-
-            // active tab text
             "& .Mui-selected": {
-              color: "#ffffff !important",
+              color: "#000000 !important",
               fontWeight: 600,
             },
-
-            // indicator bar color
             "& .MuiTabs-indicator": {
-              backgroundColor: "#ffffff",
+              backgroundColor: "#000000",
             },
           }}
         >
-          <Tab label={`MY TICKETS (${ticketCount})`} />
-          <Tab label="ADD-ONS" />
+          <Tab label="Tickets" />
+          <Tab label="Extras" />
         </Tabs>
 
-      {/* TAB CONTENT */}
-      <Box sx={{ pt: 0.2 }}>
-        {tab === 0 && (
-          <>
-            <SwipeTickets />
-
-            {/* TRANSFER + SELL BUTTONS */}
-            <Box sx={{ display: "flex", gap: 2, mt: 1, ml: 1 }}>
-              <Button
-                variant="contained"
-                onClick={handleDrawerOpen}
-                sx={{
-                  flex: 1,
-                  background: "#026AE1",
-                  textTransform: "none",
-                  fontWeight: 600,
-                  color: "#fff",
-                  "&:hover": { background: "#025ac0" },
-                  ml: 1,
-                }}
-              >
-                Transfer
-              </Button>
-
-              <Button
-                variant="contained"
-                sx={{
-                  flex: 1,
-                  background: "#dddddd",
-                  textTransform: "none",
-                  fontWeight: 600,
-                  color: "#ffffff",
-                  "&:hover": { background: "#cccccc" },
-                  mr: 2,
-                }}
-              >
-                Sell
-              </Button>
-            </Box>
-           {/* MAP SECTION */}
-            <Box
-              sx={{
-                mt: 3,
-                width: "100%",
-                height: 120,
-                borderRadius: 6,
-                overflow: "hidden",
-                position: "relative",
-                mb: 1,
-              }}
-            >
-              {/* Map iframe */}
-              <iframe
-                width="100%"
-                height="100%"
-                loading="lazy"
-                style={{ border: 0 }}
-                src={`https://www.google.com/maps?q=${encodeURIComponent(
-                  event?.venue || ""
-                )}&output=embed`}
-              ></iframe>
-
-              {/* Venue overlay */}
+        {/* Tab Content */}
+        <Box sx={{ pt: 0.2 }}>
+          {tab === 0 && (
+            <>
+              <OrderHeader/>
+              <ListTickets/>
+              {/* Map Section */}
               <Box
                 sx={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
+                  mt: 3,
                   width: "100%",
-                  bgcolor: "rgba(0, 0, 0, 0.0)", // keep transparent
-                  color: "#fff",
-                  px: 4,
-                  py: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  borderBottomLeftRadius: 6,
-                  borderBottomRightRadius: 6,
+                  height: 120,
+                  borderRadius: 6,
+                  overflow: "hidden",
+                  position: "relative",
+                  mb: 1,
                 }}
               >
-                <Typography
-                  variant="subtitle1"
-                  sx={{ color: "#505050", fontSize: 24, fontWeight: 500 }}
+
+              {/* Map iframe */}
+                <iframe
+                  width="100%"
+                  height="100%"
+                  loading="lazy"
+                  style={{ border: 0 }}
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(event?.venue || "")}&output=embed`}
+                />
+
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    bgcolor: "rgba(0,0,0,0.0)",
+                    color: "#fff",
+                    px: 4,
+                    py: 0,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
                 >
-                  {event?.venue || ""}
-                </Typography>
+                  <Typography variant="subtitle1" sx={{ color: "#505050", fontSize: 24, fontWeight: 500 }}>
+                    {event?.venue || ""}
+                  </Typography>
+                </Box>
               </Box>
+            </>
+          )}
+
+          {tab === 1 && (
+            <Box sx={{ p: 3, textAlign: "center", color: "#777" }}>
+              <Typography sx={{ fontSize: 14 }}>No Add-ons available.</Typography>
             </Box>
+          )}
+        </Box>
+      </Box>
 
-          </>
-        )}
+      {/* ── Floating Transfer / Sell bar ───────────────── */}
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: 24,
+          left: "50%",
+          transform: "translateX(-50%)",
+          display: "flex",
+          alignItems: "stretch",
+          backgroundColor: "#ffffff",
+          borderRadius: "32px",
+          boxShadow: "0 4px 18px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(0,0,0,0.09)",
+          overflow: "hidden",
+          zIndex: 1300,
+        }}
+      >
+        {/* Transfer */}
+        <Button
+          onClick={handleDrawerOpen}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "1px",
+            minWidth: 70,
+            padding: "4px 8px",
+            background: "none",
+            textTransform: "none",
+            fontWeight: 600,
+            fontSize: "11.5px",
+            color: "#111",
+            borderRadius: 0,
+            "&:hover": { background: "#f5f5f5" },
+          }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1976d2" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+          Transfer
+        </Button>
 
-        {tab === 1 && (
-          <Box sx={{ p: 3, textAlign: "center", color: "#777" }}>
-            <Typography sx={{ fontSize: 14 }}>
-              No Add-ons available.
-            </Typography>
-          </Box>
-        )}
+        {/* Divider */}
+        <Box sx={{ width: "1px", backgroundColor: "#e0e0e0", my: "8px" }} />
+
+        {/* Sell */}
+        <Button
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "3px",
+            minWidth: 55,
+            padding: "1px 8px",
+            background: "none",
+            textTransform: "none",
+            fontWeight: 600,
+            fontSize: "11.5px",
+            color: "#111",
+            borderRadius: 0,
+            "&:hover": { background: "#f5f5f5" },
+          }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+            <line x1="7" y1="7" x2="7.01" y2="7" />
+          </svg>
+          Sell
+        </Button>
       </Box>
 
       <TicketTransferFlow open={open} onClose={() => setOpen(false)} />
     </Box>
   );
 }
-
