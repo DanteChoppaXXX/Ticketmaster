@@ -12,7 +12,7 @@ const defaultEvent = {
   title: "Verified Resale Ticket",
   image: Tswift,
   tix: 2,
-  date: "Thu • Nov 21 2026 • 7:00 PM",
+  date: "Thu • 21 Nov 2026 • 7:00 PM",
   venue: "Rogers Center",
   seating: "METLIFE GATE",
   seatMap: [
