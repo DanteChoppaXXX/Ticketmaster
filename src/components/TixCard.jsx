@@ -21,8 +21,8 @@ const ImgCard = ({ event }) => {
         overflow: "hidden",
         cursor: "pointer",
         bgcolor: "transparent",
-        mb: 2,
-        mt: -6,
+        mb: 0,
+        mt: -8,
         position: "relative",  // 👈 needed for zIndex to work
         zIndex: 10,            // 👈 brings card in front of hero image
         transition: "transform 0.18s ease",
@@ -47,12 +47,12 @@ const ImgCard = ({ event }) => {
       </Box>
 
       {/* BLACK INFO SECTION */}
-      <Box sx={{ bgcolor: "#000000", px: 2, pt: 1.25, pb: 1 }}>
+      <Box sx={{ bgcolor: "#000000", px: 2, pt: 1, pb: 1 }}>
         {/* EVENT NAME */}
         <Typography
           sx={{
             color: "#fff",
-            fontSize: "1.05rem",
+            fontSize: "1.35rem",
             fontWeight: 800,
             lineHeight: 1.25,
             letterSpacing: "0.01em",

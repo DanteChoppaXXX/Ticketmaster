@@ -18,6 +18,8 @@ export default function OrderHeader() {
         alignItems: "center",
         justifyContent: "space-between",
         p: 2,
+        pb: 3,
+        mb: -0.7,
         borderRadius: 0,
         bgcolor: "#fff",
         border: "0px solid #e0e0e0",
