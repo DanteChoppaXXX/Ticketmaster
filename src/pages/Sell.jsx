@@ -216,7 +216,6 @@ export default function EmailConfirmation() {
                 fontSize: 20,
               }}
             />
-
             <Box>
               
               {seatMap.map((seat, index) => (
