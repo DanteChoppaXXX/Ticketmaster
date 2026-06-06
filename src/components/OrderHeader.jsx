@@ -6,7 +6,7 @@ export default function OrderHeader() {
   const { selectedEvent } = useEvent();
 
   // Replace with your actual order number from context/API
-  const orderNumber = event?.orderNumber || Math.floor(Math.random() * 1000000);
+  const orderNumber = "59-40035/US1";
 
   // Replace with your actual ticket count field
   const ticketCount = selectedEvent?.tix || 0;
@@ -52,7 +52,7 @@ export default function OrderHeader() {
         >
           <MoreVertIcon
             sx={{
-              fontSize: 16,
+              fontSize: 20,
               color: "text.secondary",
             }}
           />

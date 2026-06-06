@@ -36,7 +36,7 @@ const ImgCard = ({ event }) => {
         <Typography
           sx={{
             color: "#fff",
-            fontSize: "0.78rem",
+            fontSize: "0.75rem",
             fontWeight: 500,
             letterSpacing: "0.01em",
             lineHeight: 1.3,
@@ -47,12 +47,12 @@ const ImgCard = ({ event }) => {
       </Box>
 
       {/* BLACK INFO SECTION */}
-      <Box sx={{ bgcolor: "#000000", px: 2, pt: 1, pb: 1 }}>
+      <Box sx={{ bgcolor: "#000000", px: 2, pt: 0.5, pb: 0.5 }}>
         {/* EVENT NAME */}
         <Typography
           sx={{
             color: "#fff",
-            fontSize: "1.35rem",
+            fontSize: "1.10rem",
             fontWeight: 800,
             lineHeight: 1.25,
             letterSpacing: "0.01em",
@@ -76,7 +76,7 @@ const ImgCard = ({ event }) => {
             mb: 1.25,
           }}
         >
-          <Typography sx={{ color: "#fff", fontSize: "0.82rem", fontWeight: 400 }}>
+          <Typography sx={{ color: "#fff", fontSize: "0.78rem", fontWeight: 400 }}>
             {event.venue || ""}
           </Typography>
 

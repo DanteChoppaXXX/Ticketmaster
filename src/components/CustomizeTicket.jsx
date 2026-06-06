@@ -104,7 +104,7 @@ export default function CustomizeTicket() {
     const handleSave = async () => {
       console.log("Save clicked", formData);
       if (!formData.id) return console.error("Missing ID!");
-      await updateEvent(formData.id, formData);
+      await updateEvent(formData);
       console.log("Event updated!");
       setToastOpen(true);
     };

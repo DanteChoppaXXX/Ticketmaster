@@ -16,6 +16,7 @@ import TicketCard from "../components/TicketCard";
 import ListTickets from "../components/ListTickets";
 import OrderHeader from "../components/OrderHeader";
 import TicketTransferFlow from "../components/TicketTransferFlow";
+import SyncIcon from "@mui/icons-material/Loop";
 
 export default function MyTickets() {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export default function MyTickets() {
     <Box sx={{ minHeight: "100vh", background: "#f5f5f5", display: "flex", flexDirection: "column", overflow: "hidden" }}>
 
       {/* ── Hero Section ───────────────────────────────── */}
-      <Box sx={{ position: "relative", width: "100%", height: 260, overflow: "hidden", flexShrink: 0 }}>
+      <Box sx={{ position: "relative", width: "100%", height: 160, overflow: "hidden", flexShrink: 0 }}>
 
         {/* Hero Image */}
         <Box
@@ -58,7 +59,7 @@ export default function MyTickets() {
           sx={{
             position: "absolute",
             inset: 0,
-            background: "linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, transparent 40%, rgba(0,0,0,0.2) 100%)",
+            background: "linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, transparent 40%, rgba(0,0,0,0.9) 100%)",
             pointerEvents: "none",
           }}
         />
@@ -129,8 +130,8 @@ export default function MyTickets() {
             },
           }}
         >
-          <Tab label="Tickets" />
-          <Tab label="Extras" />
+          <Tab label="TICKETS" />
+          <Tab label="EXTRAS" />
         </Tabs>
 
         {/* Tab Content */}
@@ -195,7 +196,7 @@ export default function MyTickets() {
       <Box
         sx={{
           position: "fixed",
-          bottom: 24,
+          bottom: 64,
           left: "50%",
           transform: "translateX(-50%)",
           display: "flex",
@@ -234,7 +235,7 @@ export default function MyTickets() {
         </Button>
 
         {/* Divider */}
-        <Box sx={{ width: "1px", backgroundColor: "#e0e0e0", my: "8px" }} />
+        <Box sx={{ width: "1.1px", backgroundColor: "#e0e0e0", my: "8px" }} />
 
         {/* Sell */}
         <Button
@@ -243,7 +244,7 @@ export default function MyTickets() {
             flexDirection: "column",
             alignItems: "center",
             gap: "3px",
-            minWidth: 55,
+            minWidth: 70,
             padding: "1px 8px",
             background: "none",
             textTransform: "none",
@@ -254,10 +255,21 @@ export default function MyTickets() {
             "&:hover": { background: "#f5f5f5" },
           }}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-            <line x1="7" y1="7" x2="7.01" y2="7" />
-          </svg>
+          <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#1976d2"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M23 4v6h-6" />
+          <path d="M1 20v-6h6" />
+          <path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10" />
+          <path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14" />
+        </svg>
           Sell
         </Button>
       </Box>

@@ -1,12 +1,23 @@
 // src/context/EventContext.jsx
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { collection, getDocs, addDoc, setDoc, doc } from "firebase/firestore";
+
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
+
+import {
+  doc,
+  getDoc,
+  setDoc,
+} from "firebase/firestore";
+
 import { db, auth } from "../firebase";
 import Tswift from "../assets/Tswift.jpg";
 
 const EventContext = createContext();
 
-// Default reference event template
 const defaultEvent = {
   name: "Taylor Swift | The Eras Tour",
   title: "Verified Resale Ticket",
@@ -16,17 +27,23 @@ const defaultEvent = {
   venue: "Rogers Center",
   seating: "METLIFE GATE",
   seatMap: [
-    { sec: "A3", row: "10", seat: "5" },
-    { sec: "A3", row: "10", seat: "6" },
+    {
+      sec: "A3",
+      row: "10",
+      seat: "5",
+    },
+    {
+      sec: "A3",
+      row: "10",
+      seat: "6",
+    },
   ],
 };
 
 export const EventProvider = ({ children }) => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [selectedSeats, setSelectedSeats] = useState([]); 
-
-
+  const [selectedSeats, setSelectedSeats] = useState([]);
   const [user, setUser] = useState(null);
 
   // Listen for auth changes
@@ -34,10 +51,11 @@ export const EventProvider = ({ children }) => {
     const unsub = auth.onAuthStateChanged((u) => {
       setUser(u);
     });
+
     return () => unsub();
   }, []);
 
-  // Fetch events for logged-in user
+  // Fetch user's single event
   useEffect(() => {
     if (!user) {
       setEvents([]);
@@ -45,53 +63,80 @@ export const EventProvider = ({ children }) => {
       return;
     }
 
-    const fetchEvents = async () => {
+    const fetchEvent = async () => {
       try {
-        const eventsRef = collection(db, "users", user.uid, "events");
-        const snapshot = await getDocs(eventsRef);
+        const eventRef = doc(
+          db,
+          "users",
+          user.uid,
+          "events",
+          "currentEvent"
+        );
 
-        if (snapshot.empty) {
-          // Create default seed event for THIS user only
-          const docRef = await addDoc(eventsRef, defaultEvent);
-          const seededEvent = { id: docRef.id, ...defaultEvent };
+        const snapshot = await getDoc(eventRef);
+
+        // Seed default event ONCE if none exists
+        if (!snapshot.exists()) {
+          await setDoc(eventRef, defaultEvent);
+
+          const seededEvent = {
+            id: "currentEvent",
+            ...defaultEvent,
+          };
 
           setEvents([seededEvent]);
           setSelectedEvent(seededEvent);
           return;
         }
 
-        // Otherwise load existing user events
-        const userEvents = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        const eventData = {
+          id: "currentEvent",
+          ...snapshot.data(),
+        };
 
-        setEvents(userEvents);
-        setSelectedEvent(userEvents[0]);
-
+        setEvents([eventData]);
+        setSelectedEvent(eventData);
       } catch (err) {
-        console.error("Error loading user events:", err);
+        console.error("Error loading event:", err);
       }
     };
 
-    fetchEvents();
+    fetchEvent();
   }, [user]);
 
-  // Update event for a user
-  const updateEvent = async (id, updatedEvent) => {
+  // Clear selected seats when event changes
+  useEffect(() => {
+    setSelectedSeats([]);
+  }, [selectedEvent]);
+
+  // Update the user's single event document
+  const updateEvent = async (updatedEvent) => {
     if (!user) return;
 
     try {
-      const ref = doc(db, "users", user.uid, "events", id);
-      await setDoc(ref, updatedEvent, { merge: true });
-
-      setEvents((prev) =>
-        prev.map((ev) => (ev.id === id ? { ...ev, ...updatedEvent } : ev))
+      const eventRef = doc(
+        db,
+        "users",
+        user.uid,
+        "events",
+        "currentEvent"
       );
 
-      setSelectedEvent((ev) =>
-        ev?.id === id ? { ...ev, ...updatedEvent } : ev
-      );
+      await setDoc(eventRef, updatedEvent, {
+        merge: true,
+      });
+
+      setEvents((prev) => [
+        {
+          ...(prev[0] || {}),
+          ...updatedEvent,
+        },
+      ]);
+
+      setSelectedEvent((prev) => ({
+        ...(prev || {}),
+        ...updatedEvent,
+      }));
     } catch (err) {
       console.error("Failed to update event:", err);
     }
@@ -111,10 +156,6 @@ export const EventProvider = ({ children }) => {
       {children}
     </EventContext.Provider>
   );
-    useEffect(() => {
-      setSelectedSeats([]);
-    }, [selectedEvent]);
 };
 
 export const useEvent = () => useContext(EventContext);
-

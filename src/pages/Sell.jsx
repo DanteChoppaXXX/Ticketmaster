@@ -18,9 +18,11 @@ import { useEvent } from "../context/EventContext";
 
 import Ticketmaster from "../assets/emaillogo.png";
 import OrderNumber from "../assets/ticketnumber.jpeg";
+import { useNavigate } from "react-router-dom";
 
 export default function EmailConfirmation() {
   const { selectedEvent } = useEvent();
+  const navigate = useNavigate();
 
   if (!selectedEvent) return null;
 
@@ -237,6 +239,7 @@ export default function EmailConfirmation() {
           {/* CTA */}
           <Box sx={{ mt: 3 }}>
             <Button
+              onClick={() => navigate("/myevents")}
               fullWidth
               variant="contained"
               sx={{

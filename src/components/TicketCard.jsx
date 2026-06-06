@@ -22,7 +22,7 @@ export default function TicketCard({ event, seatInfo }) {
         width: "100%",
         mx: "auto",
         background: "white",
-        borderRadius: 1,
+        borderRadius: 0,
         overflow: "hidden",
         mb: 0.5,
         mt: 1,
@@ -32,9 +32,9 @@ export default function TicketCard({ event, seatInfo }) {
         <Box
           sx={{
             height: 30,
-            background: "#d0d0d0",
-            borderTopLeftRadius: 1,
-            borderTopRightRadius: 1,
+            background: "#d5d5d5",
+            borderTopLeftRadius: 0,
+            borderTopRightRadius: 0,
             color: "#000000",
             display: "flex",
             alignItems: "center",
@@ -44,7 +44,7 @@ export default function TicketCard({ event, seatInfo }) {
         >
 
           {/* Center title */}
-          <Typography sx={{ fontSize: 14, fontWeight: 700, textAlign: "center" }}>
+          <Typography sx={{ fontSize: 13, fontWeight: 700, textAlign: "center" }}>
             {ticket.title}
           </Typography>
 
@@ -61,10 +61,10 @@ export default function TicketCard({ event, seatInfo }) {
       {/* SEC/ROW/SEAT */}
       <Box
         sx={{
-          background: "#d0d0d0",
+          background: "#e5e5e5",
           color: "white",
           mt: 0,
-          pb: 2,
+          pb: 1,
           pt: 1,
           textAlign: "center",
         }}
@@ -78,23 +78,23 @@ export default function TicketCard({ event, seatInfo }) {
             mt: 1,
           }}
         >
-          <Box sx={{ textAlign: "center" }}>
-            <Typography sx={{ opacity: 0.7, fontSize: 13, fontWeight: 600 }}>SEC</Typography>
-            <Typography sx={{ fontWeight: 700, fontSize: 22 }}>
+          <Box sx={{ textAlign: "left" }}>
+            <Typography sx={{ opacity: 0.7, fontSize: 13, fontWeight: 600 }}>SECTION</Typography>
+            <Typography sx={{ fontWeight: 700, fontSize: 20 }}>
               {seat.sec}
             </Typography>
           </Box>
 
           <Box sx={{ textAlign: "center" }}>
             <Typography sx={{ opacity: 0.7, fontSize: 13, fontWeight: 600}}>ROW</Typography>
-            <Typography sx={{ fontWeight: 700, fontSize: 22 }}>
+            <Typography sx={{ fontWeight: 700, fontSize: 20 }}>
               {seat.row}
             </Typography>
           </Box>
 
           <Box sx={{ textAlign: "center" }}>
             <Typography sx={{ opacity: 0.7, fontSize: 13, fontWeight: 600 }}>SEAT</Typography>
-            <Typography sx={{ fontWeight: 700, fontSize: 22 }}>
+            <Typography sx={{ fontWeight: 700, fontSize: 20 }}>
               {seat.seat}
             </Typography>
           </Box>
