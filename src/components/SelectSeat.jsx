@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   Box,
@@ -5,12 +6,8 @@ import {
   Slide,
   Divider,
   Button,
-  IconButton,
 } from "@mui/material";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import InfoIcon from "@mui/icons-material/Info";
-import CloseIcon from "@mui/icons-material/Close";
 import ConfirmationNumberSharpIcon from "@mui/icons-material/ConfirmationNumberSharp";
 import { useEvent } from "../context/EventContext";
 
@@ -23,7 +20,6 @@ export default function SelectSeat({ open, onClose, onContinue }) {
 
   const selectedCount = selectedSeats.length;
 
-  // MULTI-SELECT toggle
   const toggleSeat = (seatObj) => {
     const exists = selectedSeats.some(
       (s) =>
@@ -36,7 +32,11 @@ export default function SelectSeat({ open, onClose, onContinue }) {
       setSelectedSeats(
         selectedSeats.filter(
           (s) =>
-            !(s.sec === seatObj.sec && s.row === seatObj.row && s.seat === seatObj.seat)
+            !(
+              s.sec === seatObj.sec &&
+              s.row === seatObj.row &&
+              s.seat === seatObj.seat
+            )
         )
       );
     } else {
@@ -46,6 +46,19 @@ export default function SelectSeat({ open, onClose, onContinue }) {
 
   return (
     <>
+      {/* Backdrop */}
+      {open && (
+        <Box
+          onClick={onClose}
+          sx={{
+            position: "fixed",
+            inset: 0,
+            bgcolor: "rgba(0,0,0,0.55)",
+            zIndex: 2999,
+          }}
+        />
+      )}
+
       <Slide direction="up" in={open} mountOnEnter unmountOnExit>
         <Box
           sx={{
@@ -53,99 +66,133 @@ export default function SelectSeat({ open, onClose, onContinue }) {
             bottom: 0,
             left: 0,
             width: "100%",
-            bgcolor: "white",
-            borderTopLeftRadius: 2,
-            borderTopRightRadius: 2,
+            height: "75vh",
+            height: "75dvh",
+            maxHeight: "90dvh",
+            minHeight: 340,
+            bgcolor: "#fff",
+            borderTopLeftRadius: "24px",
+            borderTopRightRadius: "24px",
             zIndex: 3000,
-            boxShadow: "0 -4px 18px rgba(0,0,0,0.28)",
-            maxHeight: "90vh",
-            overflowY: "auto",
+            boxShadow: "0 -4px 20px rgba(0,0,0,0.12)",
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+            color: "#171717",
           }}
         >
-          {/* HEADER */}
+          {/* Drag handle */}
           <Box
+            onClick={onClose}
             sx={{
               display: "flex",
-              alignItems: "center",
-              p: 1.5,
               justifyContent: "center",
-              position: "relative",
+              alignItems: "center",
+              pt: 1,
+              pb: 0.5,
+              flexShrink: 0,
+              cursor: "pointer",
             }}
           >
-            <Typography fontWeight={500} fontSize={14}>
-              SELECT TICKETS TO TRANSFER
-            </Typography>
-          <IconButton
-            onClick={onClose}
-            size="small"
-            sx={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)" }}
-          >
-            <CloseIcon fontSize="small" />
-          </IconButton>
+            <Box
+              sx={{
+                width: 60,
+                height: 5,
+                borderRadius: 10,
+                bgcolor: "#d2d2d7",
+              }}
+            />
           </Box>
 
-          <Divider />
-        {/* INFO BANNER */}
-        <Box
-          sx={{
-            mx: 2,
-            mt: 2,
-            p: 1.5,
-            border: "2.5px solid #a0a0a0",
-            borderRadius: "3px",
-            display: "flex",
-            alignItems: "flex-start",
-            gap: 1,
-            bgcolor: "#fff",
-          }}
-        >
-          <InfoIcon sx={{ fontSize: "1.5rem", color: "#777", mt: "1px", flexShrink: 0 }} />
-          <Typography fontSize="0.89rem" color="#333" lineHeight={1.45}>
-            Only transfer tickets to people you know and trust to ensure everyone stays safe and
-            socially distanced
-          </Typography>
-        </Box>
-
-          {/* Sec / Row Summary */}
-          <Box
-              sx={{
-                px: 2.5,
-                mt: 2,
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                flexWrap: "nowrap", // prevent wrapping
-              }}
-            >
-              {/* Section & Row */}
-              <Typography fontWeight={500} sx={{ opacity: 0.8, whiteSpace: "nowrap" }}>
-                Sec {sec}, Row {row}
-              </Typography>
-
-              {/* Ticket Icon + Count */}
-              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, whiteSpace: "nowrap" }}>
-                <ConfirmationNumberSharpIcon
-                  fontSize="small"
-                  sx={{
-                    transform: "rotate(-45deg) scaleY(0.7) scaleX(0.9)",
-                    opacity: 0.7,
-                  }}
-                />
-                <Typography sx={{ opacity: 0.6 }}>
-                  {seatMap.length} ticket{seatMap.length > 1 ? "s" : ""}
-                </Typography>
-              </Box>
-            </Box>
-
-          {/* Seat Chips */}
+          {/* Header */}
           <Box
             sx={{
               display: "flex",
-              gap: 2,
-              px: 2.5,
+              justifyContent: "center",
+              alignItems: "center",
+              px: 2,
+              pt: 0.5,
+              pb: 1.25,
+              flexShrink: 0,
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: 13,
+                fontWeight: 800,
+                letterSpacing: 0.25,
+                textAlign: "center",
+                color: "#171717",
+              }}
+            >
+              SELECT TICKETS TO TRANSFER
+            </Typography>
+          </Box>
+
+          <Divider sx={{ mx: 3, borderColor: "#ededed" }} />
+
+          {/* Section, row and ticket count */}
+          <Box
+            sx={{
+              px: { xs: 2.5, sm: 3.5 },
               mt: 2,
+              mb: 2,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 1,
+              flexShrink: 0,
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: 14,
+                fontWeight: 600,
+                color: "#292929",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Sec: {sec}, Row {row}
+            </Typography>
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 0.75,
+                flexShrink: 0,
+              }}
+            >
+              <ConfirmationNumberSharpIcon
+                sx={{
+                  fontSize: 21,
+                  color: "#353535",
+                  transform: "rotate(-35deg)",
+                }}
+              />
+
+              <Typography
+                sx={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "#555",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {seatMap.length} Ticket{seatMap.length !== 1 ? "s" : ""}
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Seat cards */}
+          <Box
+            sx={{
+              display: "flex",
               flexWrap: "wrap",
-              pb: 1,
+              justifyContent: "flex-start",
+              gap: { xs: 1, sm: 1.5 },
+              px: { xs: 1.5, sm: 3.5 },
+              flexShrink: 0,
             }}
           >
             {seatMap.map((seatObj, index) => {
@@ -158,27 +205,50 @@ export default function SelectSeat({ open, onClose, onContinue }) {
 
               return (
                 <Box
-                  key={index}
+                  key={`${seatObj.sec}-${seatObj.row}-${seatObj.seat}-${index}`}
                   onClick={() => toggleSeat(seatObj)}
+                  role="checkbox"
+                  aria-checked={isSelected}
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      toggleSeat(seatObj);
+                    }
+                  }}
                   sx={{
-                    width: 75,
-                    height: 80,
-                    borderRadius: "2px 2px 8px 8px",
+                    flex: "1 1 55px",
+                    maxWidth: 80,
+                    minWidth: 0,
+                    height: 90,
+                    borderRadius: "24px",
                     overflow: "hidden",
                     cursor: "pointer",
-                    boxShadow: "0px 2px 6px rgba(0,0,0,0.15)",
-                    border: "1px solid #e3e3e3",
-                    backgroundColor: "white",
+                    backgroundColor: "#fff",
+                    border: "1px solid #e5e5e5",
+                    boxShadow: isSelected
+                      ? "0 5px 12px rgba(0,0,0,0.16)"
+                      : "0 4px 10px rgba(0,0,0,0.10)",
                     display: "flex",
                     flexDirection: "column",
                     userSelect: "none",
+                    transition:
+                      "box-shadow 180ms ease, transform 180ms ease",
+                    "&:active": {
+                      transform: "scale(0.97)",
+                    },
+                    "&:focus-visible": {
+                      outline: "2px solid #1048d5",
+                      outlineOffset: 2,
+                    },
                   }}
                 >
-                  {/* TOP BLUE */}
+                  {/* Blue seat label */}
                   <Box
                     sx={{
-                      height: "40%",
-                      backgroundColor: "#0077e3",
+                      height: 32,
+                      flexShrink: 0,
+                      bgcolor: "#1048d5",
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
@@ -186,72 +256,89 @@ export default function SelectSeat({ open, onClose, onContinue }) {
                   >
                     <Typography
                       sx={{
-                        color: "white",
-                        fontWeight: 500,
-                        fontSize: "14px",
-                        letterSpacing: 0.3,
+                        color: "#fff",
+                        fontSize: { xs: 11, sm: 13 },
+                        fontWeight: 600,
+                        whiteSpace: "nowrap",
                       }}
                     >
                       SEAT {seatObj.seat}
                     </Typography>
                   </Box>
 
-                  {/* BOTTOM SELECT INDICATOR */}
+                  {/* Selection indicator */}
                   <Box
                     sx={{
-                      height: "50%",
-                      backgroundColor: "white",
+                      flex: 1,
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
                     }}
                   >
-                    {isSelected ? (
-                      <CheckCircleIcon sx={{ color: "#0077e3", fontSize: 28 }} />
-                    ) : (
-                      <Box
-                        sx={{
-                          width: 22,
-                          height: 22,
-                          borderRadius: "50%",
-                          border: "0.1px solid #cfffff",
-                        }}
-                      />
-                    )}
+                    <Box
+                      sx={{
+                        width: 20,
+                        height: 20,
+                        borderRadius: "50%",
+                        bgcolor: isSelected ? "#1048d5" : "#fff",
+                        border: isSelected
+                          ? "none"
+                          : "2px solid #e3e5e9",
+                        boxSizing: "border-box",
+                        transition: "all 180ms ease",
+                      }}
+                    />
                   </Box>
                 </Box>
               );
             })}
           </Box>
 
-          <Box sx={{ mb: 24 }} />
+          {/* Empty space beneath seats */}
+          <Box sx={{ flex: 1, minHeight: 24 }} />
 
-          {/* BOTTOM ACTION BAR */}
+          {/* Bottom action bar */}
           <Box
             sx={{
-              position: "fixed",
-              bottom: 0,
-              left: 0,
-              width: "100%",
-              bgcolor: "#fafafa",
-              p: 2.5,
+              flexShrink: 0,
+              bgcolor: "#fff",
+              borderTop: "1px solid #dedede",
+              px: 2.5,
+              pt: 1.25,
+              pb: "calc(env(safe-area-inset-bottom, 0px) + 12px)",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              pb: "calc(env(safe-area-inset-bottom) + 16px)",
+              minHeight: 64,
+              boxSizing: "border-box",
             }}
           >
-            <Typography fontWeight={500}>{selectedCount} Selected</Typography>
+            <Typography
+              sx={{
+                fontSize: 14,
+                fontWeight: 600,
+                color: "#555",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {selectedCount} Selected
+            </Typography>
 
             <Button
               variant="text"
               disabled={selectedCount === 0}
-              endIcon={<ChevronRightIcon />}
-              onClick={() => onContinue(selectedSeats)}  // ⬅️ send array NOT single seat
+              endIcon={<ChevronRightIcon sx={{ fontSize: 23 }} />}
+              onClick={() => onContinue(selectedSeats)}
               sx={{
-                color: selectedCount === 0 ? "#bdbdbd" : "#0077e3",
-                fontWeight: 600,
-                fontSize: "16px",
+                color: "#1048b8",
+                fontWeight: 800,
+                fontSize: 14,
+                letterSpacing: 0.1,
+                whiteSpace: "nowrap",
+                px: 0,
+                "&.Mui-disabled": {
+                  color: "#bdbdbd",
+                },
               }}
             >
               TRANSFER TO

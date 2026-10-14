@@ -17,6 +17,7 @@ import ListTickets from "../components/ListTickets";
 import OrderHeader from "../components/OrderHeader";
 import TicketTransferFlow from "../components/TicketTransferFlow";
 import SyncIcon from "@mui/icons-material/Loop";
+import VenueLayout from "../assets/venue.jpeg";
 
 export default function MyTickets() {
   const navigate = useNavigate();
@@ -180,6 +181,255 @@ export default function MyTickets() {
                     {event?.venue || ""}
                   </Typography>
                 </Box>
+              </Box> 
+              {/* Get Directions */}
+              <Box sx={{ textAlign: "center", mt: 1.5, mb: 3 }}>
+                <Link
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event?.venue || "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  underline="always"
+                  sx={{
+                    color: "#333",
+                    fontSize: 14,
+                    fontWeight: 600,
+                  }}
+                >
+                  Get Directions
+                </Link>
+              </Box>
+
+              {/* Seat Map Section */}
+              <Box sx={{ mb: 3 }}>
+                <Typography
+                  sx={{
+                    fontSize: 16,
+                    fontWeight: 800,
+                    color: "#222",
+                    letterSpacing: 0.5,
+                    mb: 0.5,
+                  }}
+                >
+                  SEAT MAP
+                </Typography>
+
+                <Typography
+                  sx={{
+                    fontSize: 14,
+                    color: "#888",
+                    mb: 2,
+                  }}
+                >
+                  Venue layout for this event
+                </Typography>
+
+                <Box
+                  component="img"
+                  src={
+                    VenueLayout
+                  }
+                  alt="Venue seating layout"
+                  sx={{
+                    width: "100%",
+                    height: 180,
+                    objectFit: "cover",
+                    borderRadius: "12px",
+                    display: "block",
+                    boxShadow: "0 3px 12px rgba(0,0,0,0.10)",
+                  }}
+                />
+              </Box>
+
+              {/* Ticket Sharing Graphic */}
+              <Box
+                sx={{
+                  position: "relative",
+                  width: "100%",
+                  minHeight: 210,
+                  display: "flex",
+                  overflow: "hidden",
+                  bgcolor: "#30212d",
+                  mb: 4,
+                  boxShadow: "0 4px 15px rgba(0,0,0,0.10)",
+                }}
+              >
+                {/* Event image */}
+                <Box
+                  sx={{
+                    width: "62%",
+                    p: 2,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "100%",
+                      overflow: "hidden",
+                      bgcolor: "#171717",
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src={event?.image}
+                      alt={event?.name || "Event"}
+                      sx={{
+                        width: "100%",
+                        height: 90,
+                        objectFit: "cover",
+                        display: "block",
+                      }}
+                    />
+
+                    <Box sx={{ px: 1.5, py: 1.25 }}>
+                      <Typography
+                        sx={{
+                          fontSize: 10,
+                          color: "#ddd",
+                          mb: 0.5,
+                        }}
+                      >
+                        {event?.date || "Event date"}
+                        {event?.time ? ` · ${event.time}` : ""}
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 12,
+                          fontWeight: 800,
+                          color: "#fff",
+                          lineHeight: 1.4,
+                        }}
+                      >
+                        {(event?.name || "YOUR EVENT").toUpperCase()}
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 11,
+                          color: "#aaa",
+                          mt: 0.5,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {event?.venue || "Event venue"}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+
+                {/* Ticket confirmation */}
+                <Box
+                  sx={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    px: 1,
+                    color: "#fff",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: { xs: 17, sm: 21 },
+                      fontWeight: 500,
+                      lineHeight: 1.35,
+                      letterSpacing: 1,
+                    }}
+                  >
+                    YOU GOT
+                    <br />
+                    TICKETS!
+                  </Typography>
+
+                  <Box
+                    sx={{
+                      width: 45,
+                      height: 2,
+                      bgcolor: "#fff",
+                      my: 1.5,
+                    }}
+                  />
+
+                  <Typography
+                    sx={{
+                      fontSize: 11,
+                      letterSpacing: 2,
+                      color: "#ddd",
+                    }}
+                  >
+                    X {event?.ticketCount || 4} TICKETS
+                  </Typography>
+                </Box>
+              </Box>
+
+              {/* Social Sharing Section */}
+              <Box
+                sx={{
+                  mx: -2.5,
+                  px: 2.5,
+                  py: 3,
+                  bgcolor: "#ededed",
+                  mb: 2,
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: 20,
+                    fontWeight: 800,
+                    color: "#171717",
+                    mb: 1,
+                  }}
+                >
+                  Post on social
+                </Typography>
+
+                <Typography
+                  sx={{
+                    fontSize: 14,
+                    color: "#666",
+                    lineHeight: 1.6,
+                    mb: 2,
+                  }}
+                >
+                  Build hype for your event and share your tickets with
+                  friends and family.
+                </Typography>
+
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={() => {
+                    if (navigator.share) {
+                      navigator.share({
+                        title: event?.name || "My event tickets",
+                        text: `I'm going to ${event?.name || "this event"}!`,
+                        url: window.location.href,
+                      }).catch(() => {});
+                    } else {
+                      navigator.clipboard?.writeText(window.location.href);
+                    }
+                  }}
+                  sx={{
+                    borderColor: "#ccc",
+                    color: "#222",
+                    borderRadius: 3,
+                    py: 1.2,
+                    fontWeight: 700,
+                    textTransform: "none",
+                    bgcolor: "#fff",
+                    "&:hover": {
+                      bgcolor: "#f8f8f8",
+                      borderColor: "#999",
+                    },
+                  }}
+                >
+                  Share You're Going ↗
+                </Button>
               </Box>
             </>
           )}
@@ -216,7 +466,7 @@ export default function MyTickets() {
             flexDirection: "column",
             alignItems: "center",
             gap: "1px",
-            minWidth: 70,
+            minWidth: 90,
             padding: "4px 8px",
             background: "none",
             textTransform: "none",
@@ -244,7 +494,8 @@ export default function MyTickets() {
             flexDirection: "column",
             alignItems: "center",
             gap: "3px",
-            minWidth: 70,
+            minWidth: 90,
+            minHeight: 60,
             padding: "1px 8px",
             background: "none",
             textTransform: "none",

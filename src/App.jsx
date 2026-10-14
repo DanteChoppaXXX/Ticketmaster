@@ -15,6 +15,7 @@ import MyTickets from "./pages/MyTickets";
 import MyAccount from "./pages/MyAccount";
 import Sell from "./pages/Sell";
 import Login from "./pages/Login";
+import ViewTickets from "./pages/ViewTickets"
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 
@@ -60,6 +61,7 @@ const App = () => {
                 <Route path="foryou" element={<ForYou />} />
                 <Route path="myevents" element={<MyEvents />} />
                 <Route path="mytickets" element={<MyTickets />} />
+                <Route path="viewtickets" element={<ViewTickets />} />
                 <Route path="eventticket" element={<EventTicketView />} />
                 <Route path="myaccount" element={<MyAccount />} />
                 <Route path="sell" element={<Sell />} />

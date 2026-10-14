@@ -100,6 +100,10 @@ const ImgCard = ({ event }) => {
       <Box sx={{ p: 0, mt: 0, textAlign: "center" }}>
         <Button
           variant="contained"
+          onClick={(e) => {
+              e.stopPropagation(); // 👈 Stops the Card click handler from firing
+              navigate("/viewtickets");
+          }}
           sx={{
             background: "#024ddf",
             width: "100%",

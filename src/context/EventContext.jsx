@@ -19,7 +19,7 @@ import Tswift from "../assets/Tswift.jpg";
 const EventContext = createContext();
 
 const defaultEvent = {
-  name: "Taylor Swift | The Eras Tour",
+    name: "Taylor Swift : The Eras Tour",
   title: "Verified Resale Ticket",
   image: Tswift,
   tix: 2,
