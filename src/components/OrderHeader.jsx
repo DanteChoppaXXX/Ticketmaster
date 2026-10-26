@@ -1,3 +1,4 @@
+
 import { Box, Typography, IconButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useEvent } from "../context/EventContext";
@@ -5,10 +6,7 @@ import { useEvent } from "../context/EventContext";
 export default function OrderHeader() {
   const { selectedEvent } = useEvent();
 
-  // Replace with your actual order number from context/API
-  const orderNumber = "59-40035/US1";
-
-  // Replace with your actual ticket count field
+  const orderNumber = selectedEvent?.orderNumber || "N/A";
   const ticketCount = selectedEvent?.tix || 0;
 
   return (
@@ -17,8 +15,9 @@ export default function OrderHeader() {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        p: 2,
-        pb: 3,
+        p: 1,
+        pt: 2,
+        pb: 1,
         mb: -0.7,
         borderRadius: 0,
         bgcolor: "#fff",
@@ -29,7 +28,7 @@ export default function OrderHeader() {
       <Box>
         <Typography
           variant="body1"
-          sx={{ fontWeight: 700 }}
+          sx={{ fontWeight: 600, fontSize: 14 }}
         >
           Order #{orderNumber}
         </Typography>
@@ -37,26 +36,27 @@ export default function OrderHeader() {
         <Typography
           variant="body2"
           color="text.secondary"
-          fontWeight="700"
+          fontWeight={600}
+          fontSize={13}
         >
-          x{ticketCount} {ticketCount === 1 ? "Ticket" : "Tickets"}
+          x{ticketCount}{" "}
+          {ticketCount === 1 ? "Ticket" : "Tickets"}
         </Typography>
       </Box>
 
       {/* Right side */}
       <IconButton
-          size="small"
+        size="small"
+        sx={{ p: 0 }}
+      >
+        <MoreVertIcon
           sx={{
-            p: 0,
+            fontSize: 20,
+            color: "text.secondary",
           }}
-        >
-          <MoreVertIcon
-            sx={{
-              fontSize: 20,
-              color: "text.secondary",
-            }}
-          />
-        </IconButton>
+        />
+      </IconButton>
     </Box>
   );
 }
+
