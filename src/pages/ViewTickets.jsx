@@ -377,6 +377,8 @@ const ViewTickets = () => {
 
             const row = ticketSeat.row ?? "-";
             const seatNumber = ticketSeat.seat ?? "-";
+            const isGeneralAdmission =
+            ticketEvent.ticketType === "generalAdmission";
 
             const title =
               ticketEvent.title || "General admission Ticket";
@@ -458,36 +460,36 @@ const ViewTickets = () => {
 
                   {/* Seat details */}
                   <div style={styles.ticketDetails}>
-                    <div style={styles.seatGrid}>
+                    <div
+                      style={{
+                        ...styles.seatGrid,
+                        gridTemplateColumns: isGeneralAdmission
+  ? "1fr 1.5fr"
+  : "1fr 1fr 0.6fr",
+                      }}
+                    >
                       <div style={styles.seatItem}>
-                        <span style={styles.seatLabel}>
-                          SECTION
-                        </span>
-
-                        <span style={styles.seatValue}>
-                          {section}
-                        </span>
+                        <span style={styles.seatLabel}>SECTION</span>
+                        <span style={styles.seatValue}>{section}</span>
                       </div>
 
-                      <div style={styles.seatItem}>
-                        <span style={styles.seatLabel}>
-                          ROW
-                        </span>
+                      {isGeneralAdmission ? (
+                        <div style={{ ...styles.seatItem, paddingTop: "16px" }}>
+                          <span style={{ ...styles.seatValue, fontSize: "17px"}}>GENERAL ADMISSION</span>
+                        </div>
+                      ) : (
+                        <>
+                          <div style={styles.seatItem}>
+                            <span style={styles.seatLabel}>ROW</span>
+                            <span style={styles.seatValue}>{row}</span>
+                          </div>
 
-                        <span style={styles.seatValue}>
-                          {row}
-                        </span>
-                      </div>
-
-                      <div style={styles.seatItem}>
-                        <span style={styles.seatLabel}>
-                          SEAT
-                        </span>
-
-                        <span style={styles.seatValue}>
-                          {seatNumber}
-                        </span>
-                      </div>
+                          <div style={styles.seatItem}>
+                            <span style={styles.seatLabel}>SEAT</span>
+                            <span style={styles.seatValue}>{seatNumber}</span>
+                          </div>
+                        </>
+                      )}
                     </div>
 
                     <button
@@ -870,7 +872,7 @@ const styles = {
   },
 
   seatValue: {
-    fontSize: "28px",
+    fontSize: "19px",
     lineHeight: 1,
     fontWeight: 800,
     color: "#080808",

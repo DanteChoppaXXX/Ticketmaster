@@ -1,7 +1,7 @@
-// components/TicketList.jsx
 import React from "react";
 import { Box } from "@mui/material";
 import TicketCard from "./TicketCard";
+import GATicketCard from "./GATicketCard";
 import { useEvent } from "../context/EventContext";
 
 export default function TicketList() {
@@ -43,13 +43,20 @@ export default function TicketList() {
         pb: 0,
       }}
     >
-      {tickets.map((ticket, index) => (
-        <TicketCard
-          key={`${ticket.seat?.seatId || index}`}
-          event={ticket.event}
-          seatInfo={ticket.seat}
-        />
-      ))}
+      {tickets.map((ticket, index) => {
+        const CardComponent =
+          ticket.event?.ticketType === "generalAdmission"
+            ? GATicketCard
+            : TicketCard;
+
+        return (
+          <CardComponent
+            key={`${ticket.seat?.seatId || index}`}
+            event={ticket.event}
+            seatInfo={ticket.seat}
+          />
+        );
+      })}
     </Box>
   );
 }
